@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Documenti — Larys Consulting</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- -------------------------------------- -->
+<!-- Toolbar                                -->
+<!-- -------------------------------------- -->
+<div id="toolbar">
+    <span class="brand">Larys · Editor Documenti</span>
+    <button id="new-doc-btn">Nuovo documento</button>
+    <label class="file-btn">
+        Carica bozza
+        <input type="file" id="load-draft-input">
+    </label>
+    <button id="save-doc-btn">Salva Bozza</button>
+    <button id="print-doc-btn">Esporta pdf</button>
+    <button id="settings-btn">Impostazioni</button>
+    <button id="tutorial-btn">Documentazione app</button>
+</div>
+
+<!-- -------------------------------------- -->
+<!-- Settings panel                         -->
+<!-- -------------------------------------- -->
+<div id="settings-panel">
+    <h3>Tema del documento</h3>
+    <div class="preset-row">
+        <button class="preset-btn" data-preset="larys">Larys Navy</button>
+        <button class="preset-btn" data-preset="neutro">Neutro Grigio</button>
+        <button class="preset-btn" data-preset="custom">Personalizzato</button>
+    </div>
+    <div class="custom-row">
+        <label for="color-primary">Colore primario</label>
+        <input type="color" id="color-primary">
+    </div>
+    <div class="custom-row">
+        <label for="color-secondary">Colore secondario</label>
+        <input type="color" id="color-secondary">
+    </div>
+    <button class="close-btn">Chiudi</button>
+</div>
+
+<!-- -------------------------------------- -->
+<!-- Main page content                      -->
+<!-- -------------------------------------- -->
+<div id="page">
+    <!-- Cover page -->
+    <div id="cover">
+        <div class="eyebrow" contenteditable="true">Sottotitolo</div>
+        <h1 id="doc-title" contenteditable="true">Titolo del documento</h1>
+        <div class="meta" contenteditable="true">Autore, data</div>
+        <div class="logo-slot" id="logo-slot"></div>
+    </div>
+
+    <!-- Index -->
+    <div id="index">
+        <h2>Indice</h2>
+        <ul id="index-list"></ul>
+        <div id="index-empty">Aggiungi una sezione per generare l'indice.</div>
+    </div>
+
+    <!-- Content -->
+    <div id="content"></div>
+
+    <!-- Add section bar -->
+    <div id="add-section-bar">
+        <button id="add-section-btn">Aggiungi Sezione</button>
+        <button id="add-section-right-btn">Aggiungi Sezione Destra</button>
+    </div>
+</div>
+
+<!-- -------------------------------------- -->
+<!-- Preview pdf export                     -->
+<!-- -------------------------------------- -->
+<div id="pdf-preview"></div>
+
+<script src="js/neutralino.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>

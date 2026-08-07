@@ -1,0 +1,11 @@
+{
+  "name": "Larys-Document",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "neu run",
+    "build": "neu build"
+  },
+  "private": true
+}
