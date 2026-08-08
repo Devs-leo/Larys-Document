@@ -24,7 +24,7 @@ export function createObservable(initialValue) {
     let value = initialValue;
     let listeners = [];
     return {
-        get : () => value,
+        get: () => value,
         set: (updater) => {
             value = typeof updater === 'function' ? updater(value) : updater;
             listeners.forEach(fn => fn(value));
@@ -32,4 +32,67 @@ export function createObservable(initialValue) {
         mutate: (fn) => fn(value),
         subscribe: (fn) => listeners.push(fn)
     }
+}
+
+// ______________________________________________________________________
+
+/**
+ * @typedef {Object} Registry
+ * @property {(key: string, factory: Function) => void} register
+ *      Associates a key with a factory function.
+ * @property {(key: string, ...args: *) => *} create
+ *      Invokes the factory registered under `key` with the given args.
+ * @property {(key: string) => boolean} has
+ *      Checks whether a key has a registered factory.
+ */
+
+/**
+ * Create a generic key -> factory registry.
+ * Used both for document-level block types (state.js) and for section content-item types and their renderers — same
+ * registration/creation mechanics regardless of what is being produced.
+ *
+ * @returns {Registry}
+ */
+export function createRegistry() {
+    const entries = {};
+    return {
+        register(key, factory) {
+            entries[key] = factory;
+        },
+        create(key, ...args) {
+            const factory = entries[key]
+            if (!factory) throw new Error(`No factory registered for key: ${key}`);
+            return factory(...args);
+        },
+        has(key) {
+            return Object.prototype.hasOwnProperty.call(entries, key);
+        }
+    };
+}
+
+/**
+ * Generates a unique identifier for blocks and content items.
+ * @returns {string}
+ */
+export function uid() {
+    return crypto.randomUUID();
+}
+
+/**
+ * Computes the insertion index for a drag-and-drop reorder, based on vertical mouse position relative to each direct
+ * child's midpoint.
+ * @param {HTMLElement} containerEl - Element whose direct children are draggable items.
+ * @param {number} clientY - the current mouse Y position
+ * @param {string} [childSelector] - Selector for draggable children.
+ * @returns {number} index at which a dropped item should be inserted.
+ */
+export function getDropIndex(containerEl, clientY, childSelector = ':scope > [draggable="true"]') {
+    const children = [...containerEl.querySelectorAll(childSelector)];
+
+    for (let i = 0; i < children.length; i++) {
+        const rect = children[i].getBoundingClientRect();
+        const midpoint = rect.top + rect.height/2;
+        if (clientY < midpoint) return i;
+    }
+    return children.length
 }

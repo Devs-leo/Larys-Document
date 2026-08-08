@@ -1,4 +1,4 @@
-import {createObservable} from "./utils.js";
+import {createObservable, createRegistry, uid} from "./utils.js";
 
 /**
  * @typedef {Object} Theme
@@ -38,16 +38,15 @@ function defaultState() {
     };
 }
 
-/**
- * Observable store holding the entire DocumentState.
- * @type {Observable}
- */
+/** Observable store holding the entire DocumentState.
+ * @type {Observable} */
 const store = createObservable(defaultState());
 
-/**
- * Return the current state of the document.
- * @returns {DocumentState}
- */
+/** registry of block-type factories
+ * @type {Registry}*/
+const blockRegistry = createRegistry();
+
+/** @returns {DocumentState}*/
 export const getState = store.get
 
 /**
@@ -105,7 +104,6 @@ export function setSections(newSections) {
 // ______________________________________________________________________
 // Block methods
 // ______________________________________________________________________
-const blockFactories = {};
 
 /**
  * Registers a factory that produces the default `data` payload foa a given block type. Called once per tyre, typically
@@ -114,7 +112,7 @@ const blockFactories = {};
  * @param {() => Object} factory
  */
 export function registerBlockType(type, factory) {
-    blockFactories[type] = factory;
+    blockRegistry.register(type, factory);
 }
 
 /**
@@ -124,9 +122,7 @@ export function registerBlockType(type, factory) {
  * @throws {Error} If `type` was never registered.
  */
 function createBlock(type) {
-    const factory = blockFactories[type];
-    if (!factory) throw new Error(`Unknown block type: ${type}`);
-    return {id: crypto.randomUUID(), type, data: factory()};
+    return {id: uid(), type, data: blockRegistry.create(type)};
 }
 
 /**
@@ -167,3 +163,31 @@ export function removeBlock(id) {
     });
 }
 
+// ______________________________________________________________________
+// Nested-tree primitives (for content items inside a section's data)
+// ______________________________________________________________________
+
+/**
+ * Runs a mutator over a block's data tree and re-renders.
+ * @param {string} blockId
+ * @param {(data: Object) => void} mutatorFn
+ */
+export function updateBlockData(blockId, mutatorFn){
+    store.set(s =>{
+        const b = s.sections.find(b => b.id === blockId);
+        if (b) mutatorFn(b.data);
+        return s;
+    });
+}
+
+/**
+ * Runs a mutator but silent.
+ * @param {string} blockId
+ * @param {(data: Object) => void} mutatorFn
+ */
+export function mutateBlockData(blockId, mutatorFn){
+    store.mutate(s => {
+        const b = s.sections.find(b => b.id === blockId);
+        if (b) mutatorFn(b.data);
+    })
+}
