@@ -1,0 +1,82 @@
+import {updateTheme, resetState} from "../state.js";
+
+const el = {
+    settingsBtn: document.getElementById('settings-btn'),
+    settingsPanel: document.getElementById('settings-panel'),
+    closeBtn: document.querySelector('#settings-panel .close-btn'),
+    presetBtns: document.querySelectorAll('#settings-panel .preset-btn'),
+    primaryInput: document.getElementById('color-primary'),
+    secondaryInput: document.getElementById('color-secondary'),
+    newDocBtn: document.getElementById('new-doc-btn'),
+    tutorialBtn: document.getElementById('tutorial-btn'),
+    addSectionBtn: document.getElementById('add-section-btn'),
+    addSignatureBtn: document.getElementById('add-section-right-btn'),
+}
+
+/**
+ * Named theme presets. "custom" has no fixed values: it just marks that
+ * the user is driving the colour inputs directly.
+ * @type {Object.<string, {primary: string, secondary: string}|null>}
+ */
+const PRESETS = {
+    larys: {primary: '#0B1330', secondary: '#B5792A'},
+    neutro: {primary: '#3A3A3A', secondary: '#8A8A8A'},
+    custom: null
+};
+
+/**
+ * Toolbar controls connections.
+ */
+export function bindToolbarEvents() {
+    el.settingsBtn.addEventListener('click', () => el.settingsPanel.classList.add('open'));
+    el.closeBtn.addEventListener('click', () => el.settingsPanel.classList.remove('open'));
+
+    el.presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setActivePreset(btn.dataset.preset);
+            const preset = PRESETS[btn.dataset.preset];
+            if (preset) updateTheme(preset);
+        });
+    });
+
+    el.primaryInput.addEventListener('input', () => {
+        setActivePreset('custom');
+        updateTheme({primary: el.primaryInput.value});
+    });
+    el.secondaryInput.addEventListener('input', () => {
+        setActivePreset('custom');
+        updateTheme({secondary: el.secondaryInput.value});
+    });
+
+    el.newDocBtn.addEventListener('click', () => {
+        if (confirm('Creare un nuovo documento? Le modifiche non salvate andranno perse.')) {
+            resetState();
+        }
+    });
+
+    el.tutorialBtn.addEventListener('click', () => {
+        //TODO aprire un modale con una sezione HTML iniettabile con la spiegazione della app, a app finita
+    });
+}
+
+/**
+ * Highlights the active preset button and marks the rest inactive.
+ * @param {string} presetKey
+ */
+function setActivePreset(presetKey) {
+    el.presetBtns.forEach(b => b.classList.toggle('active', b.dataset.preset === presetKey));
+}
+
+/**
+ * Syncs the settings panel controls with the current state.
+ * @param {DocumentState} state
+ */
+export function renderToolbar(state) {
+    el.primaryInput.value = state.theme.primary;
+    el.secondaryInput.value = state.theme.secondary;
+
+    const matched = Object.entries(PRESETS).find(
+        ([key, val]) => val && val.primary === state.theme.primary && val.secondary === state.theme.secondary
+    );
+    setActivePreset(matched ? matched[0] : 'custom');
+}
