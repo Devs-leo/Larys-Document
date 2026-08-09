@@ -280,6 +280,19 @@ body {
     margin-bottom: 4px;
 }
 
+/* TOC depth indentation for nested subsections (depth-0 = top-level
+   section entry, uses the unindented #index-list li style above as-is) */
+.toc-depth-1 {
+    padding-left: 18px;
+    font-size: 13.5px;
+}
+
+.toc-depth-2 {
+    padding-left: 34px;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
 #index-empty {
     font-size: 13px;
     color: var(--muted);
@@ -308,12 +321,6 @@ body {
     line-height: 1.65;
     color: var(--ink);
     outline: none;
-}
-
-.section .body-text:empty::before {
-    content: 'Scrivi qui il testo della sezione…';
-    color: #B7B2A3;
-    font-style: italic;
 }
 
 .section .body-text img {
@@ -376,6 +383,127 @@ body {
     color: var(--accent);
 }
 
+/* ---------- Subsections (nested, depth 1/2) ---------- */
+.subsection {
+    padding: 16px 0 16px 20px;
+    border-left: 2px solid var(--line);
+    margin: 10px 0;
+}
+
+.subsection.depth-1 h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    margin: 0 0 8px;
+    outline: none;
+}
+
+.subsection.depth-2 h4 {
+    font-family: var(--serif);
+    font-size: 15.5px;
+    margin: 0 0 6px;
+    outline: none;
+    color: var(--muted);
+}
+
+.subsection-body > * + * {
+    margin-top: 12px;
+}
+
+/* ---------- Lists ---------- */
+.content-list {
+    position: relative;
+    padding-right: 30px;
+}
+
+.content-list ul {
+    margin: 0;
+    padding-left: 22px;
+    font-size: 14.5px;
+    line-height: 1.65;
+}
+
+.content-list li {
+    outline: none;
+    padding: 2px 0;
+}
+
+.list-style-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 3px 6px;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+.list-style-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ---------- Images ---------- */
+.content-image {
+    margin: 14px 0;
+}
+
+.content-image img {
+    max-width: 100%;
+    border-radius: 3px;
+    display: block;
+}
+
+.content-image figcaption {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    outline: none;
+    font-style: italic;
+}
+
+/* ---------- Image + text (two columns) ---------- */
+.content-image-text {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin: 14px 0;
+}
+
+.content-image-text img {
+    max-width: 40%;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.content-image-text .body-text {
+    flex: 1;
+    font-size: 14.5px;
+    line-height: 1.65;
+    outline: none;
+}
+
+/* ---------- Tables ---------- */
+.content-table {
+    margin: 14px 0;
+    overflow-x: auto;
+}
+
+.content-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.content-table td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    vertical-align: top;
+}
+
 /* ---------- Right-margin block (signatures, dates, approvals) ---------- */
 .signature-block {
     margin: 18px 60px 30px;
@@ -391,12 +519,6 @@ body {
     line-height: 1.7;
     outline: none;
     min-width: 220px;
-}
-
-.signature-block .signature-text:empty::before {
-    content: 'Es. Luogo, data — Firma _______________';
-    color: #B7B2A3;
-    font-style: italic;
 }
 
 .signature-block .remove-sig {
@@ -477,6 +599,11 @@ body.pdf-mode #toolbar {
     }
 }
 
+/* ---------- Empty-field placeholders ----------
+   Single mechanism, keyed on data-role (set by sectionRenderer.js /
+   content.js), never on class selectors — see ARCHITECTURE.md
+   "Empty-field placeholders" for why: class-based placeholders here
+   previously collided in specificity with these and silently won. */
 
 [data-role="section-title"]:empty::before {
     content: 'Titolo della sezione…';

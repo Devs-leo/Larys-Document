@@ -158,7 +158,7 @@ function renderParagraph(item) {
  */
 function renderList(item) {
     const wrap = document.createElement('div')
-    wrap.className = 'list';
+    wrap.className = 'content-list';
 
     const ul = document.createElement('ul');
     ul.style.listStyleType = item.data.style;

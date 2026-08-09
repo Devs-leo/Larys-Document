@@ -2,6 +2,7 @@ import {getState} from "../state.js";
 import {renderCover, bindCoverEvents} from "./content.js";
 import {renderToolbar, bindToolbarEvents} from "./toolbar.js";
 import {renderSection} from "../sections/sectionRenderer.js";
+import {bindSectionEvents} from "../sections/sectionEvents.js";
 
 const pageEl = document.getElementById("page");
 
@@ -25,4 +26,4 @@ function applyTheme(theme) {
     pageEl.style.setProperty('--accent', theme.secondary);
 }
 
-export {bindCoverEvents, bindToolbarEvents};
+export {bindCoverEvents, bindToolbarEvents, bindSectionEvents};

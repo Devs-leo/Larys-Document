@@ -1,5 +1,5 @@
 import {onChange} from "./state.js";
-import {render, bindCoverEvents, bindToolbarEvents} from "./components/index.js";
+import {render, bindCoverEvents, bindToolbarEvents, bindSectionEvents} from "./components/index.js";
 
 /**
  * Function to handle the window close event by gracefully exiting the Neutralino application.
@@ -16,6 +16,7 @@ Neutralino.events.on("windowClose", onWindowClose);
 
 bindCoverEvents();
 bindToolbarEvents();
+bindSectionEvents();
 
 onChange(render);
 render();
