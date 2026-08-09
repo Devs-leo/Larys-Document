@@ -1,6 +1,7 @@
 import {getState} from "../state.js";
 import {renderCover, bindCoverEvents} from "./content.js";
 import {renderToolbar, bindToolbarEvents} from "./toolbar.js";
+import {renderSection} from "../sections/sectionRenderer.js";
 
 const pageEl = document.getElementById("page");
 
@@ -11,6 +12,7 @@ export function render() {
     const state = getState();
     renderCover(state);
     renderToolbar(state);
+    renderSection(state);
     applyTheme(state.theme);
 }
 

@@ -96,3 +96,19 @@ export function getDropIndex(containerEl, clientY, childSelector = ':scope > [dr
     }
     return children.length
 }
+
+
+
+/**
+ * Ensures a contenteditable element is truly empty (no child nodes) once
+ * its visible text becomes empty, so CSS `:empty::before` placeholders
+ * keep working. Some webview engines (WebKit in particular) leave a
+ * stray <br> behind after the user deletes all content, which would
+ * otherwise defeat the :empty selector.
+ * @param {HTMLElement} el
+ */
+export function normalizeEmptyEditable(el) {
+    if (el.textContent.trim() === '') {
+        el.innerHTML = '';
+    }
+}
