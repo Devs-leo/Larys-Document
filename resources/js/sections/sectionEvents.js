@@ -3,10 +3,12 @@ import {
     addContentItem,
     getBlockLabel,
     mutateContentItemData,
-    mutateContentItemWith,
-    setContentItemData
+    mutateContentItemWith
 } from "./sectionManager.js";
 import {normalizeEmptyEditable} from "../utils.js";
+import {addListItem, updateListItemText} from "./listManager.js";
+import {showConfirmModal} from "../components/confirmModal.js";
+import {showListSettingsModal} from '../components/listSettingsModal.js';
 
 const contentEl = document.getElementById('content');
 const LIST_STYLE_CYCLE = ['disc', 'circle', 'square', 'decimal', 'lower-alpha', 'upper-alpha', 'lower-roman', 'upper-roman'];
@@ -22,7 +24,7 @@ export function bindSectionEvents() {
 function onContentClick(e) {
     const removeBtn = e.target.closest('[data-action="remove-block"]');
     if (removeBtn) {
-        handleRemoveBlock(removeBtn.dataset.blockId);
+        handleRemoveBlock(removeBtn.dataset.blockId).then();
         return;
     }
 
@@ -32,20 +34,26 @@ function onContentClick(e) {
         return;
     }
 
+    const addListBtn = e.target.closest('[data-action="add-list-item"]');
+    if (addListBtn) {
+        const parentItemId = addListBtn.dataset.parentItemId || null;
+        addListItem(itemBlockId(addListBtn), itemId(addListBtn), parentItemId);
+        return;
+    }
+
     const styleBtn = e.target.closest('[data-role="list-style-toggle"]');
     if (styleBtn) {
-        handleListStyleToggle(styleBtn);
+        showListSettingsModal(itemBlockId(styleBtn), itemId(styleBtn));
     }
 }
 
 /**
  * @param {string} blockId
  */
-function handleRemoveBlock(blockId) {
+async function handleRemoveBlock(blockId) {
     const block = getState().sections.find(b => b.id === blockId);
     if (!block) return;
-
-    if (confirm(`Eliminare "${getBlockLabel(block)}"?`)) {
+    if (await showConfirmModal(`Eliminare "${getBlockLabel(block)}"?`)) {
         removeBlock(blockId);
     }
 }
@@ -90,7 +98,7 @@ function onContentInput(e) {
             mutateContentItemData(itemBlockId(el), itemId(el), {caption: el.textContent});
             break;
         case 'list-item':
-            handleListItemInput(el);
+            updateListItemText(itemBlockId(el), itemId(el), el.dataset.listItemId, el.innerHTML);
             break;
         case 'table-cell':
             handleTableCellInput(el);

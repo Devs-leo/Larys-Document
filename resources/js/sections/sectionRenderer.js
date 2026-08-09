@@ -1,5 +1,6 @@
 import {getState} from "../state.js";
 import {isSubsectionAllowed} from "./sectionManager.js";
+import {isListNestingAllowed} from "./listManager.js";
 
 const contentEl = document.getElementById('content');
 const indexListEl = document.getElementById('index-list');
@@ -161,25 +162,66 @@ function renderList(item) {
     const wrap = document.createElement('div')
     wrap.className = 'content-list';
 
-    const ul = document.createElement('ul');
-    ul.style.listStyleType = item.data.style;
-    item.data.items.forEach((html, i) => {
-        const li = document.createElement('li');
-        li.contentEditable = 'true';
-        li.innerHTML = html;
-        li.dataset.role = 'list-item';
-        li.dataset.itemIndex = String(i);
-        ul.appendChild(li);
-    });
-    wrap.appendChild(ul);
-
     const styleBtn = document.createElement('button');
-    styleBtn.className = 'list-style-btn';
     styleBtn.type = 'button';
+    styleBtn.className = 'list-style-btn';
     styleBtn.textContent = '⚙';
     styleBtn.dataset.role = 'list-style-toggle';
     wrap.appendChild(styleBtn);
+
+    wrap.appendChild(renderListItems(item.data.items, item.data.style));
+
+    const addBtn = document.createElement('button');
+    addBtn.type = 'button';
+    addBtn.className = 'add-list-item-btn';
+    addBtn.textContent = '+ voce';
+    addBtn.dataset.action = 'add-list-item';
+    addBtn.dataset.parentItemId = '';
+    wrap.appendChild(addBtn);
+
     return wrap;
+}
+
+/** @param {ListItem[]} items
+ * @param {string} style
+ * @returns {HTMLUListElement}
+ */
+function renderListItems(items, style) {
+    const ul = document.createElement('ul');
+    ul.style.listStyleType = style;
+    items.forEach(item => ul.appendChild(renderListItem(item, style)));
+    return ul;
+}
+
+/** @param {ListItem} item
+ * @param {string} style
+ * @returns {HTMLLIElement}
+ */
+function renderListItem(item, style) {
+    const li = document.createElement('li');
+
+    const text = document.createElement('span');
+    text.contentEditable = 'true';
+    text.innerHTML = item.html;
+    text.dataset.role = 'list-item';
+    text.dataset.listItemId = item.id;
+    li.appendChild(text);
+
+    if (isListNestingAllowed(item.depth)) {
+        const nestBtn = document.createElement('button');
+        nestBtn.type = 'button';
+        nestBtn.className = 'add-sub-item-btn';
+        nestBtn.textContent = '+';
+        nestBtn.title = 'Aggiungi sotto-voce';
+        nestBtn.dataset.action = 'add-list-item';
+        nestBtn.dataset.parentItemId = item.id;
+        li.appendChild(nestBtn);
+    }
+
+    if (item.children.length > 0) {
+        li.appendChild(renderListItems(item.children, style));
+    }
+    return li;
 }
 
 /**
@@ -367,25 +409,25 @@ const ADDABLE_TYPES = [
  * @param {number} containerDepth
  * @returns {HTMLElement}
  */
-function renderAddContentBar(blockId, containerId, containerDepth){
+function renderAddContentBar(blockId, containerId, containerDepth) {
     const bar = document.createElement('div');
     bar.className = 'add-content-bar';
     if (isSubsectionAllowed(containerDepth)) {
         const btn = document.createElement('button');
-        btn.type= 'button';
+        btn.type = 'button';
         btn.textContent = '+ Sottosezione';
-        btn.dataset.action= 'add-content-item';
+        btn.dataset.action = 'add-content-item';
         btn.dataset.blockId = blockId;
         btn.dataset.containerId = containerId;
         btn.dataset.type = 'subsection';
         bar.appendChild(btn);
     }
 
-    ADDABLE_TYPES.forEach(({type, label})=> {
+    ADDABLE_TYPES.forEach(({type, label}) => {
         const btn = document.createElement('button');
-        btn.type= 'button';
+        btn.type = 'button';
         btn.textContent = `+ ${label}`;
-        btn.dataset.action= 'add-content-item';
+        btn.dataset.action = 'add-content-item';
         btn.dataset.blockId = blockId;
         btn.dataset.containerId = containerId;
         btn.dataset.type = type;

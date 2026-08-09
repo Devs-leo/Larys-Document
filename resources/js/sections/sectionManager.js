@@ -1,4 +1,4 @@
-import {registerBlockType, updateBlockData, mutateBlockData} from "../state.js";
+import {registerBlockType, updateBlockData, mutateBlockData, getState} from "../state.js";
 import {createRegistry, uid} from "../utils.js";
 
 const MAX_SUBSECTION_DEPTH = 2;
@@ -19,7 +19,8 @@ registerBlockType('section', () => ({title: '', content: []}));
 registerBlockType('signature', () => ({text: ''}));
 
 contentItemRegistry.register('paragraph', () => ({html: ''}));
-contentItemRegistry.register('list', () => ({style: 'disc', items: ['']}));
+contentItemRegistry.register('list', () => (
+    {style: 'disc', items: [{id: uid(), html: '', depth: 1, children: []}]}));
 contentItemRegistry.register('image', () => ({src: '', caption: ''}));
 contentItemRegistry.register('imageText', () => ({imagePosition: 'left', imageSrc: '', imageCaption: '', html: ''}));
 contentItemRegistry.register('table', () => ({
@@ -217,4 +218,19 @@ export function getBlockLabel(block) {
     if (block.type === 'section') return block.data.title || 'Sezione senza titolo';
     if (block.type === 'signature') return 'Blocco firma';
     return 'Blocco';
+}
+
+/**
+ * Read-only lookup of a content item's data by id. Used by UI that needs
+ * to display current values (e.g. the list settings modal) without
+ * duplicating the tree-walk logic already in findContentItem.
+ * @param {string} blockId
+ * @param {string} itemId
+ * @returns {Object|null}
+ */
+export function getContentItemData(blockId, itemId) {
+    const block = getState().sections.find(b => b.id === blockId);
+    if (!block) return null;
+    const found = findContentItem(block.data.content, itemId);
+    return found ? found.item.data : null;
 }

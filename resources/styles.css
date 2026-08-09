@@ -678,3 +678,101 @@ body.pdf-mode #toolbar {
     border-color: var(--accent);
     color: var(--accent);
 }
+
+.content-list {
+    position: relative;
+    padding-left: 30px; /* era padding-right */
+}
+
+.list-style-btn {
+    position: absolute;
+    top: 0;
+    left: 0; /* era right: 0 */
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 3px 6px;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+.list-style-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.content-list ul ul {
+    padding-left: 20px;
+    margin-top: 4px;
+}
+
+.add-list-item-btn, .add-sub-item-btn {
+    background: none;
+    border: 1px dashed var(--line);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 6px;
+}
+
+.add-sub-item-btn {
+    margin-left: 8px;
+    padding: 0 6px;
+}
+
+.confirm-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 19, 48, .55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+}
+
+.confirm-modal-overlay.open {
+    display: flex;
+}
+
+.confirm-modal {
+    background: #fff;
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 360px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .28);
+}
+
+.confirm-modal-message {
+    font-size: 14px;
+    color: var(--ink);
+    margin: 0 0 18px;
+}
+
+.confirm-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.confirm-modal-actions button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--sans);
+}
+
+.confirm-modal-cancel {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--ink);
+}
+
+.confirm-modal-confirm {
+    background: var(--navy);
+    border: none;
+    color: #fff;
+}

@@ -1,4 +1,5 @@
 import {updateTheme, resetState, addBlock} from "../state.js";
+import {showConfirmModal} from "./confirmModal.js";
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -50,8 +51,8 @@ export function bindToolbarEvents() {
         updateTheme({secondary: el.secondaryInput.value});
     });
 
-    el.newDocBtn.addEventListener('click', () => {
-        if (confirm('Creare un nuovo documento? Le modifiche non salvate andranno perse.')) {
+    el.newDocBtn.addEventListener('click', async () => {
+        if (await showConfirmModal('Creare un nuovo documento? Le modifiche non salvate andranno perse.')) {
             resetState();
         }
     });
