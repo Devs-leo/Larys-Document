@@ -71,6 +71,7 @@ function renderSectionBlock(block) {
     block.data.content.forEach(item => {
         body.appendChild(renderContentItem(item, ctx));
     });
+    body.appendChild(renderAddContentBar(block.id, block.id, 0));
     el.appendChild(body);
     el.appendChild(renderSectionControls(block.id));
     return el;
@@ -248,7 +249,7 @@ function renderTable(item) {
             td.style.width = `${colWidth}%`;
             td.contentEditable = 'true';
             td.innerHTML = cellHtml;
-            td.dataset.role= 'table-cell';
+            td.dataset.role = 'table-cell';
             td.dataset.row = String(rowIndex);
             td.dataset.col = String(colIndex);
             tr.appendChild(td);
@@ -264,11 +265,11 @@ function renderTable(item) {
  * @param {RenderCtx} ctx
  * @returns {HTMLElement}
  */
-function renderSubsection(item, ctx){
+function renderSubsection(item, ctx) {
     const el = document.createElement('div');
     el.className = `subsection depth-${item.data.depth}`;
 
-    const heading = document.createElement(item.data.depth === 1 ? 'h3': 'h4');
+    const heading = document.createElement(item.data.depth === 1 ? 'h3' : 'h4');
     heading.id = `section-${item.id}`;
     heading.contentEditable = 'true';
     heading.textContent = item.data.title;
@@ -286,17 +287,18 @@ function renderSubsection(item, ctx){
 
     const childCtx = {blockId: ctx.blockId, containerDepth: item.data.depth};
     item.data.content.forEach(child => body.appendChild(renderContentItem(child, childCtx)));
+    body.appendChild(renderAddContentBar(ctx.blockId, item.id, item.data.depth));
     el.appendChild(body);
 
     return el;
 }
 
 /**
-* Rebuilds the TOC from state. Only "section" blocks produce a top-level
-* entry (signature blocks are excluded on purpose). Nested subsections
-* produce indented child entries, recursively, up to the depth cap.
-* @param {DocumentState} state
-*/
+ * Rebuilds the TOC from state. Only "section" blocks produce a top-level
+ * entry (signature blocks are excluded on purpose). Nested subsections
+ * produce indented child entries, recursively, up to the depth cap.
+ * @param {DocumentState} state
+ */
 function renderIndex(state) {
     indexListEl.innerHTML = '';
     const sectionBlocks = state.sections.filter(b => b.type === 'section');
@@ -321,7 +323,7 @@ function renderIndex(state) {
  * @param {number} depth
  * @returns {HTMLElement}
  */
-function renderIndexEntry (anchorId, title, depth){
+function renderIndexEntry(anchorId, title, depth) {
     const li = document.createElement('li');
     li.className = `toc-depth-${depth}`;
 
@@ -342,9 +344,52 @@ function renderIndexEntry (anchorId, title, depth){
  * @param {number} depth
  * @returns {{id: string, title: string, depth: number}[]}
  */
-function collectTocEntries(content,depth){
-    return content.filter(item => item.type ==='subsection').flatMap(item => [
+function collectTocEntries(content, depth) {
+    return content.filter(item => item.type === 'subsection').flatMap(item => [
         {id: item.id, title: item.data.title, depth},
         ...collectTocEntries(item.data.content, depth + 1)
     ]);
+}
+
+
+const ADDABLE_TYPES = [
+    {type: 'paragraph', label: 'Paragrafo'},
+    {type: 'list', label: 'Elenco'},
+    {type: 'image', label: 'Immagine'},
+    {type: 'imageText', label: 'Immagine + testo'},
+    {type: 'table', label: 'Tabella'},
+];
+
+
+/**
+ * @param {string} blockId
+ * @param {string} containerId
+ * @param {number} containerDepth
+ * @returns {HTMLElement}
+ */
+function renderAddContentBar(blockId, containerId, containerDepth){
+    const bar = document.createElement('div');
+    bar.className = 'add-content-bar';
+    if (isSubsectionAllowed(containerDepth)) {
+        const btn = document.createElement('button');
+        btn.type= 'button';
+        btn.textContent = '+ Sottosezione';
+        btn.dataset.action= 'add-content-item';
+        btn.dataset.blockId = blockId;
+        btn.dataset.containerId = containerId;
+        btn.dataset.type = 'subsection';
+        bar.appendChild(btn);
+    }
+
+    ADDABLE_TYPES.forEach(({type, label})=> {
+        const btn = document.createElement('button');
+        btn.type= 'button';
+        btn.textContent = `+ ${label}`;
+        btn.dataset.action= 'add-content-item';
+        btn.dataset.blockId = blockId;
+        btn.dataset.containerId = containerId;
+        btn.dataset.type = type;
+        bar.appendChild(btn);
+    });
+    return bar;
 }

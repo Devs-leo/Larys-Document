@@ -1,5 +1,11 @@
 import {getState, updateBlock, removeBlock} from "../state.js";
-import {getBlockLabel, mutateContentItemData, mutateContentItemWith, setContentItemData} from "./sectionManager.js";
+import {
+    addContentItem,
+    getBlockLabel,
+    mutateContentItemData,
+    mutateContentItemWith,
+    setContentItemData
+} from "./sectionManager.js";
 import {normalizeEmptyEditable} from "../utils.js";
 
 const contentEl = document.getElementById('content');
@@ -17,6 +23,12 @@ function onContentClick(e) {
     const removeBtn = e.target.closest('[data-action="remove-block"]');
     if (removeBtn) {
         handleRemoveBlock(removeBtn.dataset.blockId);
+        return;
+    }
+
+    const addBtn = e.target.closest('[data-action="add-content-item"]');
+    if (addBtn) {
+        addContentItem(addBtn.dataset.blockId, addBtn.dataset.containerId, addBtn.dataset.type);
         return;
     }
 

@@ -1,4 +1,4 @@
-import {updateTheme, resetState} from "../state.js";
+import {updateTheme, resetState, addBlock} from "../state.js";
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -30,6 +30,8 @@ const PRESETS = {
 export function bindToolbarEvents() {
     el.settingsBtn.addEventListener('click', () => el.settingsPanel.classList.add('open'));
     el.closeBtn.addEventListener('click', () => el.settingsPanel.classList.remove('open'));
+    el.addSectionBtn.addEventListener('click', () => addBlock('section'));
+    el.addSignatureBtn.addEventListener('click', () => addBlock('signature'));
 
     el.presetBtns.forEach(btn => {
         btn.addEventListener('click', () => {

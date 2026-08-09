@@ -652,3 +652,29 @@ body.pdf-mode #toolbar {
     color: #B7B2A3;
     font-style: italic;
 }
+
+
+.add-content-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+}
+
+.add-content-bar button {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: var(--sans);
+}
+
+.add-content-bar button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
