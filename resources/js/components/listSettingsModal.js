@@ -1,5 +1,4 @@
-import {setContentItemData} from '../sections/sectionManager.js';
-import {getListLevel, moveListItem} from '../sections/listManager.js';
+import {getListLevel, moveListItem, setListStyle} from '../sections/listManager.js';
 
 const STYLES = ['disc', 'circle', 'square', 'decimal', 'lower-alpha', 'upper-alpha', 'lower-roman', 'upper-roman'];
 
@@ -36,7 +35,7 @@ function renderStyles(activeStyle) {
         btn.textContent = style;
         btn.className = 'list-style-option' + (style === activeStyle ? ' active' : '');
         btn.addEventListener('click', () => {
-            setContentItemData(current.blockId, current.listItemId, current.parentItemId, style);
+            setListStyle(current.blockId, current.listItemId, current.parentItemId, style);
             refresh();
         });
         stylesEl.appendChild(btn);

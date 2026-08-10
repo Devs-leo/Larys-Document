@@ -1,6 +1,5 @@
 import {
     getContentItemData,
-    mutateContentItemData,
     mutateContentItemWith,
     updateContentItemWith
 } from "./sectionManager.js";

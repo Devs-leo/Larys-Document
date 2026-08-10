@@ -173,8 +173,8 @@ function renderList(item) {
  *   the id of the item whose children this level renders.
  * @returns {HTMLElement}
  */
-function renderListLevel(items, style,parentItemId) {
-    const wrap = document.createElement('div')
+function renderListLevel(items, style, parentItemId) {
+    const wrap = document.createElement('div');
     wrap.className = 'content-list';
 
     const controls = document.createElement('div');
@@ -186,7 +186,7 @@ function renderListLevel(items, style,parentItemId) {
     styleBtn.textContent = '⚙';
     styleBtn.dataset.role = 'list-style-toggle';
     styleBtn.dataset.parentItemId = parentItemId ?? '';
-    wrap.appendChild(styleBtn);
+    controls.appendChild(styleBtn);
 
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
@@ -194,13 +194,16 @@ function renderListLevel(items, style,parentItemId) {
     addBtn.textContent = '+ voce';
     addBtn.dataset.action = 'add-list-item';
     addBtn.dataset.parentItemId = parentItemId ?? '';
-    wrap.appendChild(addBtn);
+    controls.appendChild(addBtn);
 
     wrap.appendChild(controls);
 
     const ul = document.createElement('ul');
     ul.style.listStyleType = style;
     items.forEach(item => ul.appendChild(renderListItem(item)));
+    wrap.appendChild(ul);
+
+    return wrap;
 }
 
 /**
