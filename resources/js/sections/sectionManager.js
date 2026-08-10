@@ -20,7 +20,7 @@ registerBlockType('signature', () => ({text: ''}));
 
 contentItemRegistry.register('paragraph', () => ({html: ''}));
 contentItemRegistry.register('list', () => (
-    {style: 'disc', items: [{id: uid(), html: '', depth: 1, children: []}]}));
+    {style: 'disc', items: [{id: uid(), html: '', depth: 1, children: [], childrenStyle: 'disc'}]}));
 contentItemRegistry.register('image', () => ({src: '', caption: ''}));
 contentItemRegistry.register('imageText', () => ({imagePosition: 'left', imageSrc: '', imageCaption: '', html: ''}));
 contentItemRegistry.register('table', () => ({

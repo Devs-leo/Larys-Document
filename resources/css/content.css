@@ -1,0 +1,332 @@
+#content {
+    padding: 20px 60px 10px;
+}
+
+.section {
+    padding: 26px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.section h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    margin: 0 0 10px;
+    outline: none;
+    scroll-margin-top: 20px;
+}
+
+.section .body-text {
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--ink);
+    outline: none;
+}
+
+.section .body-text img {
+    max-width: 100%;
+    border-radius: 3px;
+    margin: 10px 0;
+    display: block;
+}
+
+.section-controls {
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 8px;
+}
+
+.section-controls button, .section-controls label {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 11px;
+    cursor: pointer;
+    padding: 2px 4px;
+}
+
+.section-controls button:hover {
+    color: var(--accent);
+}
+
+.section-controls .delete-btn:hover {
+    color: #c0392b;
+}
+
+.section-controls input[type=file] {
+    display: none;
+}
+
+#add-section-bar {
+    padding: 16px 60px 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#add-section-bar button {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--navy);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--sans), serif;
+    font-weight: 600;
+}
+
+#add-section-bar button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ---------- Subsections (nested, depth 1/2) ---------- */
+.subsection {
+    padding: 16px 0 16px 20px;
+    border-left: 2px solid var(--line);
+    margin: 10px 0;
+}
+
+.subsection.depth-1 h3 {
+    font-family: var(--serif);
+    font-size: 18px;
+    margin: 0 0 8px;
+    outline: none;
+}
+
+.subsection.depth-2 h4 {
+    font-family: var(--serif);
+    font-size: 15.5px;
+    margin: 0 0 6px;
+    outline: none;
+    color: var(--muted);
+}
+
+.subsection-body > * + * {
+    margin-top: 12px;
+}
+
+/* ---------- Add content bar ---------- */
+.add-content-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+}
+
+.add-content-bar button {
+    background: #fff;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    cursor: pointer;
+    font-family: var(--sans);
+}
+
+.add-content-bar button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ---------- Lists ---------- */
+.content-list {
+    margin: 8px 0;
+}
+
+.list-level-controls {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+
+.content-list ul {
+    margin: 0;
+    padding-left: 22px;
+    font-size: 14.5px;
+    line-height: 1.65;
+}
+
+.content-list li {
+    outline: none;
+    padding: 2px 0;
+}
+
+.list-style-btn {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 3px 6px;
+    cursor: pointer;
+    color: var(--muted);
+}
+
+.list-style-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+.add-list-item-btn, .add-sub-item-btn {
+    background: none;
+    border: 1px dashed var(--line);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-sub-item-btn {
+    margin-left: 8px;
+    padding: 0 6px;
+}
+
+/* ---------- Images ---------- */
+.content-image {
+    margin: 14px 0;
+}
+
+.content-image img {
+    max-width: 100%;
+    border-radius: 3px;
+    display: block;
+}
+
+.content-image figcaption {
+    font-size: 12.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    outline: none;
+    font-style: italic;
+}
+
+/* ---------- Image + text (two columns) ---------- */
+.content-image-text {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin: 14px 0;
+}
+
+.content-image-text img {
+    max-width: 40%;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.content-image-text .body-text {
+    flex: 1;
+    font-size: 14.5px;
+    line-height: 1.65;
+    outline: none;
+}
+
+/* ---------- Tables ---------- */
+.content-table {
+    margin: 14px 0;
+    overflow-x: auto;
+}
+
+.content-table table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.content-table td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    vertical-align: top;
+}
+
+/* ---------- Right-margin block (signatures, dates, approvals) ---------- */
+.signature-block {
+    margin: 18px 60px 30px;
+    padding: 14px 0 0;
+    border-top: 1px dashed var(--line);
+    text-align: right;
+}
+
+.signature-block .signature-text {
+    display: inline-block;
+    text-align: right;
+    font-size: 14px;
+    line-height: 1.7;
+    outline: none;
+    min-width: 220px;
+}
+
+.signature-block .remove-sig {
+    display: block;
+    margin: 6px 0 0 auto;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.signature-block .remove-sig:hover {
+    color: #c0392b;
+}
+
+/* ---------- Empty-field placeholders ----------
+   Single mechanism, keyed on data-role (set by sectionRenderer.js /
+   content.js), never on class selectors — a class-based version of the
+   paragraph/signature placeholders used to also exist and silently won
+   over these by CSS specificity. data-role is now the only source. */
+
+[data-role="section-title"]:empty::before {
+    content: 'Titolo della sezione…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="subsection-title"]:empty::before {
+    content: 'Titolo della sottosezione…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="paragraph"]:empty::before {
+    content: 'Scrivi qui il testo del paragrafo…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="list-item"]:empty::before {
+    content: 'Elemento elenco…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="table-cell"]:empty::before {
+    content: '…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="image-caption"]:empty::before {
+    content: 'Didascalia (opzionale)…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="image-text-body"]:empty::before {
+    content: 'Scrivi qui il testo…';
+    color: #B7B2A3;
+    font-style: italic;
+}
+
+[data-role="signature-text"]:empty::before {
+    content: 'Es. Luogo, data — Firma _______________';
+    color: #B7B2A3;
+    font-style: italic;
+}

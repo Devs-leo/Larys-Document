@@ -159,45 +159,55 @@ function renderParagraph(item) {
  * @returns {HTMLElement}
  */
 function renderList(item) {
+    return renderListLevel(item.data.items, item.data.style, null);
+}
+
+/**
+ * Renders one level of a list (its own <ul>, gear, and "+ voce" button)
+ * and recurses into nested levels. Each level gets its own controls
+ * because each level has its own independently-configurable style —
+ * changing the style of a sub-list must never touch the parent's.
+ * @param {ListItem[]} items
+ * @param {string} style
+ * @param {string|null} parentItemId - null for the root level, otherwise
+ *   the id of the item whose children this level renders.
+ * @returns {HTMLElement}
+ */
+function renderListLevel(items, style,parentItemId) {
     const wrap = document.createElement('div')
     wrap.className = 'content-list';
+
+    const controls = document.createElement('div');
+    controls.className = 'list-level-controls';
 
     const styleBtn = document.createElement('button');
     styleBtn.type = 'button';
     styleBtn.className = 'list-style-btn';
     styleBtn.textContent = '⚙';
     styleBtn.dataset.role = 'list-style-toggle';
+    styleBtn.dataset.parentItemId = parentItemId ?? '';
     wrap.appendChild(styleBtn);
-
-    wrap.appendChild(renderListItems(item.data.items, item.data.style));
 
     const addBtn = document.createElement('button');
     addBtn.type = 'button';
     addBtn.className = 'add-list-item-btn';
     addBtn.textContent = '+ voce';
     addBtn.dataset.action = 'add-list-item';
-    addBtn.dataset.parentItemId = '';
+    addBtn.dataset.parentItemId = parentItemId ?? '';
     wrap.appendChild(addBtn);
 
-    return wrap;
-}
+    wrap.appendChild(controls);
 
-/** @param {ListItem[]} items
- * @param {string} style
- * @returns {HTMLUListElement}
- */
-function renderListItems(items, style) {
     const ul = document.createElement('ul');
     ul.style.listStyleType = style;
-    items.forEach(item => ul.appendChild(renderListItem(item, style)));
-    return ul;
+    items.forEach(item => ul.appendChild(renderListItem(item)));
 }
 
-/** @param {ListItem} item
- * @param {string} style
+/**
+ * @param {ListItem} item
  * @returns {HTMLLIElement}
  */
-function renderListItem(item, style) {
+function renderListItem(item) {
     const li = document.createElement('li');
 
     const text = document.createElement('span');
@@ -219,7 +229,7 @@ function renderListItem(item, style) {
     }
 
     if (item.children.length > 0) {
-        li.appendChild(renderListItems(item.children, style));
+        li.appendChild(renderListLevel(item.children, item.childrenStyle, item.id));
     }
     return li;
 }

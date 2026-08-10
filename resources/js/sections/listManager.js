@@ -1,4 +1,9 @@
-import {mutateContentItemData, mutateContentItemWith, updateContentItemWith} from "./sectionManager.js";
+import {
+    getContentItemData,
+    mutateContentItemData,
+    mutateContentItemWith,
+    updateContentItemWith
+} from "./sectionManager.js";
 import {uid} from "../utils.js";
 
 const MAX_LIST_DEPTH = 2;
@@ -9,6 +14,7 @@ const MAX_LIST_DEPTH = 2;
  * @property {string} html
  * @property {number} depth
  * @property {ListItem[]} children
+ * @property {string} childrenStyle
  */
 
 /**
@@ -24,7 +30,7 @@ export function isListNestingAllowed(depth) {
  * @returns {ListItem}
  */
 function createListItem(depth) {
-    return {id: uid(), html: '', depth, children:[]};
+    return {id: uid(), html: '', depth, children: [], childrenStyle: 'disc'};
 }
 
 /**
@@ -132,4 +138,39 @@ export function moveListItem(blockId, listItemId, parentItemId, itemId, directio
         if (j < 0 || j >= arr.length) return;
         [arr[i], arr[j]] = [arr[j], arr[i]];
     });
+}
+
+
+/**
+ * Reads a single level's style + items.
+ * @param {string} blockId
+ * @param {string} listItemId
+ * @param {string|null} parentItemId
+ * @returns {{style: string, items: ListItem[]}|null}
+ */
+export function getListLevel(blockId, listItemId, parentItemId) {
+    const data = getContentItemData(blockId, listItemId);
+    if (!data) return null;
+    if (parentItemId === null) return {style: data.style, items: data.items};
+    const found = findListItem(data.items, parentItemId);
+    return found ? {style: found.item.childrenStyle, items: found.item.children} : null;
+}
+
+/**
+ * Set the style of a single list level
+ * @param {string} blockId
+ * @param {string} listItemId
+ * @param {string|null} parentItemId
+ * @param {string} style
+ */
+export function setListStyle(blockId, listItemId, parentItemId, style) {
+    updateContentItemWith(blockId,listItemId, data => {
+        if (parentItemId === null) {
+            data.style = style;
+            return;
+        }
+        const found = findListItem(data.items, parentItemId);
+        if (!found) throw new Error(`No list item with id: ${parentItemId}`);
+        found.item.childrenStyle = style;
+    })
 }

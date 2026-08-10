@@ -11,7 +11,6 @@ import {showConfirmModal} from "../components/confirmModal.js";
 import {showListSettingsModal} from '../components/listSettingsModal.js';
 
 const contentEl = document.getElementById('content');
-const LIST_STYLE_CYCLE = ['disc', 'circle', 'square', 'decimal', 'lower-alpha', 'upper-alpha', 'lower-roman', 'upper-roman'];
 
 export function bindSectionEvents() {
     contentEl.addEventListener('click', onContentClick);
@@ -43,7 +42,8 @@ function onContentClick(e) {
 
     const styleBtn = e.target.closest('[data-role="list-style-toggle"]');
     if (styleBtn) {
-        showListSettingsModal(itemBlockId(styleBtn), itemId(styleBtn));
+        const parentItemId = styleBtn.dataset.parentItemId || null;
+        showListSettingsModal(itemBlockId(styleBtn), itemId(styleBtn), parentItemId);
     }
 }
 
@@ -56,17 +56,6 @@ async function handleRemoveBlock(blockId) {
     if (await showConfirmModal(`Eliminare "${getBlockLabel(block)}"?`)) {
         removeBlock(blockId);
     }
-}
-
-/**
- * Cycles a list's bullet style through LIST_STYLE_CYCLE.
- * @param {HTMLElement} btn
- */
-function handleListStyleToggle(btn) {
-    const ul = btn.closest('[data-item-id]').querySelector('ul');
-    const current = ul.style.listStyleType || 'disc';
-    const next = LIST_STYLE_CYCLE[(LIST_STYLE_CYCLE.indexOf(current) + 1) % LIST_STYLE_CYCLE.length];
-    setContentItemData(itemBlockId(btn), itemId(btn), {style: next});
 }
 
 /**
@@ -104,14 +93,6 @@ function onContentInput(e) {
             handleTableCellInput(el);
             break;
     }
-}
-
-/**
- * @param {HTMLElement} el
- */
-function handleListItemInput(el) {
-    const index = Number(el.dataset.itemIndex);
-    mutateContentItemWith(itemBlockId(el), itemId(el), data => data.items[index] = el.innerHTML);
 }
 
 /**

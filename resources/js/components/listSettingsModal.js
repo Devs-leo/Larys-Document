@@ -1,5 +1,5 @@
-import {getContentItemData, setContentItemData} from '../sections/sectionManager.js';
-import {moveListItem} from '../sections/listManager.js';
+import {setContentItemData} from '../sections/sectionManager.js';
+import {getListLevel, moveListItem} from '../sections/listManager.js';
 
 const STYLES = ['disc', 'circle', 'square', 'decimal', 'lower-alpha', 'upper-alpha', 'lower-roman', 'upper-roman'];
 
@@ -36,7 +36,7 @@ function renderStyles(activeStyle) {
         btn.textContent = style;
         btn.className = 'list-style-option' + (style === activeStyle ? ' active' : '');
         btn.addEventListener('click', () => {
-            setContentItemData(current.blockId, current.listItemId, {style});
+            setContentItemData(current.blockId, current.listItemId, current.parentItemId, style);
             refresh();
         });
         stylesEl.appendChild(btn);
@@ -58,7 +58,7 @@ function renderItems(items) {
         upBtn.textContent = '↑';
         upBtn.disabled = i === 0;
         upBtn.addEventListener('click', () => {
-            moveListItem(current.blockId, current.listItemId, null, item.id, 'up');
+            moveListItem(current.blockId, current.listItemId, current.parentItemId, item.id, 'up');
             refresh();
         });
         li.appendChild(upBtn);
@@ -68,7 +68,7 @@ function renderItems(items) {
         downBtn.textContent = '↓';
         downBtn.disabled = i === items.length - 1;
         downBtn.addEventListener('click', () => {
-            moveListItem(current.blockId, current.listItemId, null, item.id, 'down');
+            moveListItem(current.blockId, current.listItemId, current.parentItemId, item.id, 'down');
             refresh();
         });
         li.appendChild(downBtn);
@@ -79,7 +79,7 @@ function renderItems(items) {
 
 /** Re-reads the list's current data and redraws the modal in place. */
 function refresh() {
-    const data = getContentItemData(current.blockId, current.listItemId);
+    const data = getListLevel(current.blockId, current.listItemId, current.parentItemId);
     if (!data) { close(); return; }
     renderStyles(data.style);
     renderItems(data.items);
@@ -93,9 +93,10 @@ function refresh() {
  * reorder modal.
  * @param {string} blockId
  * @param {string} listItemId
+ * @param {string|null} parentItemId
  */
-export function showListSettingsModal(blockId, listItemId) {
-    current = {blockId, listItemId};
+export function showListSettingsModal(blockId, listItemId, parentItemId = null) {
+    current = {blockId, listItemId, parentItemId};
     overlay.classList.add('open');
     refresh();
 }

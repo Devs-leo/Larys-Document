@@ -1,0 +1,209 @@
+:root {
+    --navy: #0B1330;
+    --navy-2: #141B42;
+    --paper: #FAF8F3;
+    --ink: #1C1F2B;
+    --muted: #6B7280;
+    --accent: #B5792A;
+    --accent-soft: #F3E6D2;
+    --line: #E4DFD3;
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #EAE6DC;
+    font-family: var(--sans);
+    color: var(--ink);
+}
+
+/* ---------- Editing page ---------- */
+#page {
+    max-width: 960px;
+    margin: 32px auto 80px;
+    background: var(--paper);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .18);
+}
+
+#cover {
+    background: var(--navy);
+    background-image: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff;
+    padding: 70px 60px 56px;
+    position: relative;
+}
+
+#cover .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    opacity: .65;
+    outline: none;
+}
+
+#cover h1 {
+    font-family: var(--serif);
+    font-size: 38px;
+    line-height: 1.2;
+    margin: 16px 0 10px;
+    outline: none;
+    font-weight: 700;
+}
+
+#cover .meta {
+    font-size: 13px;
+    opacity: .75;
+    outline: none;
+}
+
+#cover .logo-slot {
+    position: absolute;
+    right: 56px;
+    bottom: 40px;
+    text-align: right;
+}
+
+#cover .logo-slot img {
+    max-height: 46px;
+    max-width: 160px;
+}
+
+#cover .logo-slot .placeholder {
+    font-family: var(--serif);
+    font-size: 11px;
+    letter-spacing: .25em;
+    opacity: .55;
+}
+
+/* ---------- Index / TOC ---------- */
+#index {
+    padding: 40px 60px 10px;
+    border-bottom: 1px solid var(--line);
+}
+
+#index h2 {
+    font-family: var(--serif);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    color: var(--muted);
+    margin: 0 0 14px;
+}
+
+#index-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#index-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 14.5px;
+    padding: 5px 0;
+}
+
+#index-list a {
+    color: var(--ink);
+    text-decoration: none;
+}
+
+#index-list a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+#index-list .dots {
+    flex: 1;
+    border-bottom: 1px dotted #b9b3a4;
+    margin-bottom: 4px;
+}
+
+/* TOC depth indentation for nested subsections (depth-0 = top-level
+   section entry, uses the unindented #index-list li style above as-is) */
+.toc-depth-1 {
+    padding-left: 18px;
+    font-size: 13.5px;
+}
+
+.toc-depth-2 {
+    padding-left: 34px;
+    font-size: 12.5px;
+    color: var(--muted);
+}
+
+#index-empty {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+}
+
+/* ---------- pdf preview (paged.js render target) ---------- */
+#pdf-preview {
+    display: none;
+}
+
+#pdf-preview.active {
+    display: block;
+}
+
+#pdf-preview.active ~ #page, #pdf-preview.active ~ #add-section-bar {
+    display: none;
+}
+
+body.pdf-mode #toolbar {
+    display: none;
+}
+
+#pdf-preview .running-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+    color: var(--muted);
+}
+
+#pdf-preview .running-header img {
+    height: 18px;
+}
+
+#pdf-preview .running-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 9.5px;
+    color: var(--muted);
+}
+
+#pdf-preview .running-footer img {
+    height: 16px;
+}
+
+#pdf-preview-exit {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 200;
+    background: var(--navy);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 16px;
+    cursor: pointer;
+}
+
+@media print {
+    body {
+        background: #fff;
+    }
+
+    #toolbar, #settings-panel, #pdf-preview-exit {
+        display: none !important;
+    }
+}
