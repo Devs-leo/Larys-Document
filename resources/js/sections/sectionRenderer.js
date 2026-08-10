@@ -140,7 +140,6 @@ function renderContentItem(item, ctx) {
     el.dataset.itemId = item.id;
     el.dataset.blockId = ctx.blockId;
     el.dataset.itemType = item.type;
-    el.draggable = true;
     return el;
 }
 
@@ -245,19 +244,167 @@ function renderListItem(item) {
  * @returns {HTMLElement}
  */
 function renderImage(item) {
-    const wrap = document.createElement('div');
+    const wrap = document.createElement('figure');
     wrap.className = 'content-image';
+
+    const rawWidth = item.data.width ?? (item.data.widthPercent ? `${item.data.widthPercent}%` : 'auto');
+    const align = item.data.align ?? 'center';
+
+    const originalWidth = item.data.originalWidth || 0;
+    const originalHeight = item.data.originalHeight || 0;
+
+    let numericPxWidth = '';
+    if (typeof rawWidth === 'number') {
+        numericPxWidth = rawWidth;
+    } else if (rawWidth === 'auto' && originalWidth > 0) {
+        numericPxWidth = originalWidth;
+    }
+
+    const controls = document.createElement('div');
+    controls.className = 'content-image-controls';
+
+    const pickBtn = document.createElement('button');
+    pickBtn.type = 'button';
+    pickBtn.className = 'btn-image-action';
+    pickBtn.textContent = '🖼️ Immagine';
+    pickBtn.dataset.action = 'pick-image-source';
+
+    const alignGroup = document.createElement('div');
+    alignGroup.className = 'content-image-align-group';
+    [
+        {value: 'left', label: 'Sinistra'},
+        {value: 'center', label: 'Centro'},
+        {value: 'right', label: 'Destra'},
+    ].forEach(({value, label}) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = label;
+        btn.dataset.action = 'set-image-align';
+        btn.dataset.align = value;
+        btn.classList.toggle('active', align === value);
+        alignGroup.appendChild(btn);
+    });
+
+    const presetsGroup = document.createElement('div');
+    presetsGroup.className = 'content-image-presets-group';
+
+    const btn50 = document.createElement('button');
+    btn50.type = 'button';
+    btn50.textContent = '-50%';
+    btn50.title = 'Riduci a metà';
+    btn50.dataset.action = 'scale-image';
+    btn50.dataset.scale = '0.5';
+    presetsGroup.appendChild(btn50);
+
+    const btn11 = document.createElement('button');
+    btn11.type = 'button';
+    btn11.textContent = '1:1 (Reset)';
+    btn11.title = 'Reimposta dimensioni originali';
+    btn11.dataset.action = 'set-image-width';
+    btn11.dataset.width = 'auto'; // 'auto' forza l'immagine alla dimensione nativa
+    btn11.classList.toggle('active', rawWidth === 'auto');
+    presetsGroup.appendChild(btn11);
+
+    const btnX2 = document.createElement('button');
+    btnX2.type = 'button';
+    btnX2.textContent = 'x2';
+    btnX2.title = 'Raddoppia dimensione';
+    btnX2.dataset.action = 'scale-image';
+    btnX2.dataset.scale = '2';
+    presetsGroup.appendChild(btnX2);
+
+    const btnMax = document.createElement('button');
+    btnMax.type = 'button';
+    btnMax.textContent = 'Max';
+    btnMax.title = 'Adatta al foglio';
+    btnMax.dataset.action = 'set-image-width';
+    btnMax.dataset.width = '100%';
+    btnMax.classList.toggle('active', rawWidth === '100%');
+    presetsGroup.appendChild(btnMax);
+
+    const advWrap = document.createElement('div');
+    advWrap.className = 'image-advanced-wrapper';
+
+    const advBtn = document.createElement('button');
+    advBtn.type = 'button';
+    advBtn.className = 'btn-advanced-toggle';
+    advBtn.textContent = '⚙️ Avanzate';
+    advBtn.dataset.action = 'toggle-image-advanced';
+
+    const advDropdown = document.createElement('div');
+    advDropdown.className = 'image-advanced-dropdown';
+
+    const labelPx = document.createElement('label');
+    labelPx.textContent = 'Larghezza esatta (px):';
+
+    const inputPx = document.createElement('input');
+    inputPx.type = 'number';
+    inputPx.min = '10';
+    inputPx.step = '10';
+    inputPx.placeholder = originalWidth ? `Es. ${originalWidth}` : 'Es. 300';
+    inputPx.value = numericPxWidth;
+    inputPx.dataset.role = 'image-width-px';
+
+    const infoOrig = document.createElement('div');
+    infoOrig.className = 'image-orig-info';
+    infoOrig.textContent = (originalWidth > 0 && originalHeight > 0)
+        ? `Nativa: ${originalWidth} x ${originalHeight} px`
+        : 'Dimensione originale non rilevata';
+
+    const warningBox = document.createElement('div');
+    warningBox.className = 'resolution-warning';
+
+    const currentPxVal = typeof rawWidth === 'number' ? rawWidth : 0;
+    const isExceeded = originalWidth > 0 && currentPxVal > originalWidth;
+    warningBox.style.display = isExceeded ? 'block' : 'none';
+    warningBox.innerHTML = `⚠️ <strong>Attenzione:</strong> La larghezza (${currentPxVal}px) supera quella originale. L'immagine potrebbe sgranare.`;
+
+    advDropdown.appendChild(labelPx);
+    advDropdown.appendChild(inputPx);
+    advDropdown.appendChild(infoOrig);
+    advDropdown.appendChild(warningBox);
+
+    advWrap.appendChild(advBtn);
+    advWrap.appendChild(advDropdown);
+
+    controls.appendChild(pickBtn);
+    controls.appendChild(alignGroup);
+    controls.appendChild(presetsGroup);
+    controls.appendChild(advWrap);
+
+    const media = document.createElement('div');
+    media.className = `content-image-media align-${align}`;
+
+    if (rawWidth === 'auto') {
+        media.style.width = 'max-content';
+        media.style.maxWidth = '100%';
+    } else if (typeof rawWidth === 'string' && rawWidth.endsWith('%')) {
+        media.style.width = rawWidth;
+    } else if (typeof rawWidth === 'number') {
+        media.style.width = `${rawWidth}px`;
+        media.style.maxWidth = '100%';
+    } else {
+        media.style.width = `${rawWidth}px`;
+        media.style.maxWidth = '100%';
+    }
 
     const img = document.createElement('img');
     img.src = item.data.src;
-    img.alt = item.data.caption;
-    wrap.appendChild(img);
+    img.alt = item.data.caption || '';
+    img.style.height = 'auto';
+
+    media.appendChild(img);
 
     const caption = document.createElement('figcaption');
+    caption.className = `fc align-${align}`;
     caption.contentEditable = 'true';
     caption.textContent = item.data.caption;
     caption.dataset.role = 'image-caption';
+
+    wrap.appendChild(controls);
+    wrap.appendChild(media);
     wrap.appendChild(caption);
+
     return wrap;
 }
 
@@ -441,13 +588,6 @@ function renderAddContentBar(blockId, containerId, containerDepth, beforeItemId 
     }
 
     ADDABLE_TYPES.forEach(({type, label}) => {
-        // const btn = document.createElement('button');
-        // btn.type = 'button';
-        // btn.textContent = `+ ${label}`;
-        // btn.dataset.action = 'add-content-item';
-        // btn.dataset.blockId = blockId;
-        // btn.dataset.containerId = containerId;
-        // btn.dataset.type = type;
         bar.appendChild(renderAddContentButton(blockId, containerId, type, `+ ${label}`, beforeItemId));
     });
     return bar;
@@ -469,7 +609,7 @@ function renderAddContentButton(blockId, containerId, type, label, beforeItemId)
     btn.dataset.blockId = blockId;
     btn.dataset.containerId = containerId;
     btn.dataset.type = type;
-    if(beforeItemId !== null) btn.dataset.beforeItemId = beforeItemId;
+    if (beforeItemId !== null) btn.dataset.beforeItemId = beforeItemId;
     return btn;
 }
 

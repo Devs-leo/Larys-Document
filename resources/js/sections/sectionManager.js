@@ -21,7 +21,9 @@ registerBlockType('signature', () => ({text: ''}));
 contentItemRegistry.register('paragraph', () => ({html: ''}));
 contentItemRegistry.register('list', () => (
     {style: 'disc', items: [{id: uid(), html: '', depth: 1, children: [], childrenStyle: 'disc'}]}));
-contentItemRegistry.register('image', () => ({src: '', caption: ''}));
+contentItemRegistry.register('image', () => (
+    {src: '', caption: '', width: 'auto', align: 'center', originalWidth: 0, originalHeight: 0}
+));
 contentItemRegistry.register('imageText', () => ({imagePosition: 'left', imageSrc: '', imageCaption: '', html: ''}));
 contentItemRegistry.register('table', () => ({
     widthPercent: 100, columns: [{widthPercent: 50}, {widthPercent: 50}], rows: [['', '']]

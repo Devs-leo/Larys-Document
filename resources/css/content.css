@@ -376,3 +376,178 @@
 .content-insert-gap.is-open .add-content-bar {
     display: flex;
 }
+
+/* Contenitore Immagine */
+figure.content-image {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Barra Controlli Immagine */
+.content-image-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+    position: relative;
+    z-index: 10;
+}
+
+.content-image-controls button {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.content-image-controls button:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+
+.content-image-controls button.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #1d4ed8;
+}
+
+.content-image-align-group,
+.content-image-presets-group {
+    display: flex;
+    gap: 2px;
+    background: #e2e8f0;
+    padding: 2px;
+    border-radius: 4px;
+}
+
+.content-image-align-group button,
+.content-image-presets-group button {
+    border: none;
+    border-radius: 3px;
+    padding: 3px 8px;
+}
+
+/* Wrapper Avanzate & Dropdown Fluttuante */
+.image-advanced-wrapper {
+    position: relative;
+    margin-left: auto; /* Spinge il pulsante Avanzate a destra */
+}
+
+.image-advanced-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    width: 250px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    text-align: left;
+}
+
+.image-advanced-wrapper.is-open .image-advanced-dropdown {
+    display: block;
+}
+
+.image-advanced-dropdown label {
+    display: block;
+    font-weight: 600;
+    font-size: 12px;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.image-advanced-dropdown input[type="number"] {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.image-advanced-dropdown input[type="number"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.image-orig-info {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 6px;
+    padding-bottom: 4px;
+}
+
+/* Box Avviso Risoluzione */
+.resolution-warning {
+    margin-top: 8px;
+    background: #fef2f2;
+    border-left: 4px solid #ef4444;
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: #991b1b;
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+/* Rendering Media e Allineamento Immagine */
+.content-image-media {
+    display: flex;
+    justify-content: center;
+    transition: width 0.15s ease-out;
+}
+
+.content-image-media.align-left {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.content-image-media.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.content-image-media.align-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.content-image-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+.fc.align-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.fc.align-left {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.fc.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}

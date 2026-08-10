@@ -1,7 +1,7 @@
 import {getState, updateBlock, removeBlock} from "../state.js";
 import {
     addContentItem,
-    getBlockLabel,
+    getBlockLabel, getContentItemData,
     mutateContentItemData,
     mutateContentItemWith
 } from "./sectionManager.js";
@@ -9,18 +9,36 @@ import {normalizeEmptyEditable} from "../utils.js";
 import {addListItem, updateListItemText} from "./listManager.js";
 import {showConfirmModal} from "../components/confirmModal.js";
 import {showListSettingsModal} from '../components/listSettingsModal.js';
+import {
+    mutateImageWidth,
+    pickImageSource,
+    scaleImageWidth,
+    setImageAlign,
+    setImageSource,
+    setImageWidth
+} from "../services/manageImages.js";
 
 const contentEl = document.getElementById('content');
 
 export function bindSectionEvents() {
     contentEl.addEventListener('click', onContentClick);
     contentEl.addEventListener('input', onContentInput);
+    contentEl.addEventListener('change', inputSizeImageInput);
+}
+
+function inputSizeImageInput(e) {
+    if (e.target.dataset.role === 'image-width-px') {
+        const val = Number(e.target.value);
+        if (val && val > 0) {
+            setImageWidth(itemBlockId(e.target), itemId(e.target), String(val));
+        }
+    }
 }
 
 /**
  * @param {MouseEvent} e
  */
-function onContentClick(e) {
+async function onContentClick(e) {
     const removeBtn = e.target.closest('[data-action="remove-block"]');
     if (removeBtn) {
         handleRemoveBlock(removeBtn.dataset.blockId).then();
@@ -50,6 +68,51 @@ function onContentClick(e) {
     if (styleBtn) {
         const parentItemId = styleBtn.dataset.parentItemId || null;
         showListSettingsModal(itemBlockId(styleBtn), itemId(styleBtn), parentItemId);
+        return;
+    }
+
+    const imageBtn = e.target.closest('[data-action="pick-image-source"]');
+    if (imageBtn) {
+        const imageData = await pickImageSource();
+        if (imageData) {
+            setImageSource(itemBlockId(imageBtn), itemId(imageBtn), imageData);
+        }
+        return;
+    }
+
+    const alignBtn = e.target.closest('[data-action="set-image-align"]');
+    if (alignBtn) {
+        setImageAlign(itemBlockId(alignBtn), itemId(alignBtn), alignBtn.dataset.align);
+        const figcaption = alignBtn.closest('.content-image').querySelector('figcaption');
+        if (figcaption) {
+            figcaption.className = `fc align-${alignBtn.dataset.align}`;
+        }
+        return;
+    }
+
+    const widthBtn = e.target.closest('[data-action="set-image-width"]');
+    if (widthBtn) {
+        setImageWidth(itemBlockId(widthBtn), itemId(widthBtn), widthBtn.dataset.width);
+        return;
+    }
+
+    const scaleBtn = e.target.closest('[data-action="scale-image"]');
+    if (scaleBtn) {
+        const factor = Number(scaleBtn.dataset.scale);
+        scaleImageWidth(itemBlockId(scaleBtn), itemId(scaleBtn), factor);
+        return;
+    }
+
+    const toggleAdvBtn = e.target.closest('[data-action="toggle-image-advanced"]');
+    if (toggleAdvBtn) {
+        const wrapper = toggleAdvBtn.closest('.image-advanced-wrapper');
+        if (wrapper) {
+            document.querySelectorAll('.image-advanced-wrapper.is-open').forEach(w => {
+                if (w !== wrapper) w.classList.remove('is-open');
+            });
+            wrapper.classList.toggle('is-open');
+        }
+        return;
     }
 }
 
@@ -105,6 +168,9 @@ function onContentInput(e) {
         case 'image-text-body':
             mutateContentItemData(itemBlockId(el), itemId(el), {html: el.innerHTML});
             break;
+        case 'image-width-px':
+            handleImagePixelWidthInput(el);
+            break;
         case 'image-caption':
             mutateContentItemData(itemBlockId(el), itemId(el), {caption: el.textContent});
             break;
@@ -114,6 +180,43 @@ function onContentInput(e) {
         case 'table-cell':
             handleTableCellInput(el);
             break;
+    }
+}
+
+
+function handleImagePixelWidthInput(el) {
+    const val = Number(el.value);
+    const figure = el.closest('figure.content-image');
+    if (!figure) return;
+
+    const blockId = itemBlockId(el);
+    const itemId = itemId(el);
+    const itemData = getContentItemData(blockId, itemId);
+    const originalWidth = itemData?.originalWidth || 0;
+
+    const media = figure.querySelector('.content-image-media');
+    const warningBox = figure.querySelector('.resolution-warning');
+
+    if (val && val > 0) {
+        if (media) {
+            media.style.width = `${val}px`;
+            media.style.maxWidth = '100%';
+        }
+        if (warningBox && originalWidth > 0) {
+            if (val > originalWidth) {
+                warningBox.style.display = 'block';
+                warningBox.innerHTML = `⚠️ <strong>Attenzione:</strong> La larghezza impostata (${val}px) supera quella originale (${originalWidth}px). L'immagine potrebbe risultare sgranata.`;
+            } else {
+                warningBox.style.display = 'none';
+            }
+        }
+        mutateImageWidth(blockId, itemId, val);
+    } else if (el.value === '') {
+        if (media) {
+            media.style.width = 'max-content';
+        }
+        if (warningBox) warningBox.style.display = 'none';
+        mutateImageWidth(blockId, itemId, 'auto');
     }
 }
 
