@@ -13,7 +13,7 @@ import {
     mutateImageWidth,
     pickImageSource,
     scaleImageWidth,
-    setImageAlign,
+    setImageAlign, setImagePosition,
     setImageSource,
     setImageWidth
 } from "../services/manageImages.js";
@@ -53,14 +53,8 @@ async function onContentClick(e) {
 
     const addBtn = e.target.closest('[data-action="add-content-item"]');
     if (addBtn) {
-        addContentItem(addBtn.dataset.blockId, addBtn.dataset.containerId, addBtn.dataset.type);
-        return;
-    }
-
-    const addListBtn = e.target.closest('[data-action="add-list-item"]');
-    if (addListBtn) {
-        const parentItemId = addListBtn.dataset.parentItemId || null;
-        addListItem(itemBlockId(addListBtn), itemId(addListBtn), parentItemId);
+        const beforeItemId = addBtn.dataset.beforeItemId || null;
+        addContentItem(addBtn.dataset.blockId, addBtn.dataset.containerId, addBtn.dataset.type, beforeItemId);
         return;
     }
 
@@ -83,10 +77,6 @@ async function onContentClick(e) {
     const alignBtn = e.target.closest('[data-action="set-image-align"]');
     if (alignBtn) {
         setImageAlign(itemBlockId(alignBtn), itemId(alignBtn), alignBtn.dataset.align);
-        const figcaption = alignBtn.closest('.content-image').querySelector('figcaption');
-        if (figcaption) {
-            figcaption.className = `fc align-${alignBtn.dataset.align}`;
-        }
         return;
     }
 
@@ -112,6 +102,12 @@ async function onContentClick(e) {
             });
             wrapper.classList.toggle('is-open');
         }
+        return;
+    }
+
+    const positionBtn = e.target.closest('[data-action="set-image-position"]');
+    if (positionBtn) {
+        setImagePosition(itemBlockId(positionBtn), itemId(positionBtn), positionBtn.dataset.align);
         return;
     }
 }
@@ -190,8 +186,8 @@ function handleImagePixelWidthInput(el) {
     if (!figure) return;
 
     const blockId = itemBlockId(el);
-    const itemId = itemId(el);
-    const itemData = getContentItemData(blockId, itemId);
+    const currentItemId = itemId(el);
+    const itemData = getContentItemData(blockId, currentItemId);
     const originalWidth = itemData?.originalWidth || 0;
 
     const media = figure.querySelector('.content-image-media');
@@ -210,13 +206,13 @@ function handleImagePixelWidthInput(el) {
                 warningBox.style.display = 'none';
             }
         }
-        mutateImageWidth(blockId, itemId, val);
+        mutateImageWidth(blockId, currentItemId, val);
     } else if (el.value === '') {
         if (media) {
             media.style.width = 'max-content';
         }
         if (warningBox) warningBox.style.display = 'none';
-        mutateImageWidth(blockId, itemId, 'auto');
+        mutateImageWidth(blockId, currentItemId, 'auto');
     }
 }
 

@@ -239,17 +239,41 @@ function renderListItem(item) {
     return li;
 }
 
+
 /**
  * @param {ContentItem} item
  * @returns {HTMLElement}
  */
 function renderImage(item) {
+    return renderImageFigure(item, {
+        actionName: 'set-image-align',
+        currentValue: item.data.align ?? 'center',
+        choices: [
+            {value: 'left', label: 'Sinistra'},
+            {value: 'center', label: 'Centro'},
+            {value: 'right', label: 'Destra'},
+        ],
+    });
+}
+
+/**
+ * Renders the shared <figure class="content-image"> block used by both
+ * standalone images and the image side of imageText: pick-source button,
+ * a position/align button group, size presets, an "advanced" exact-width
+ * dropdown, and the media + caption. Only the button group's action name,
+ * current value, and choices differ between callers — every other control
+ * and the underlying data fields (src/caption/width/originalWidth/
+ * originalHeight) are identical, since image and imageText were unified
+ * onto the same field names precisely to make this reuse possible.
+ * @param {ContentItem} item
+ * @param {{actionName: string, currentValue: string, choices: {value:string,label:string}[]}} alignConfig
+ * @returns {HTMLElement}
+ */
+function renderImageFigure(item, alignConfig) {
     const wrap = document.createElement('figure');
     wrap.className = 'content-image';
 
-    const rawWidth = item.data.width ?? (item.data.widthPercent ? `${item.data.widthPercent}%` : 'auto');
-    const align = item.data.align ?? 'center';
-
+    const rawWidth = item.data.width ?? 'auto';
     const originalWidth = item.data.originalWidth || 0;
     const originalHeight = item.data.originalHeight || 0;
 
@@ -268,22 +292,20 @@ function renderImage(item) {
     pickBtn.className = 'btn-image-action';
     pickBtn.textContent = '🖼️ Immagine';
     pickBtn.dataset.action = 'pick-image-source';
+    controls.appendChild(pickBtn);
 
     const alignGroup = document.createElement('div');
     alignGroup.className = 'content-image-align-group';
-    [
-        {value: 'left', label: 'Sinistra'},
-        {value: 'center', label: 'Centro'},
-        {value: 'right', label: 'Destra'},
-    ].forEach(({value, label}) => {
+    alignConfig.choices.forEach(({value, label}) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.textContent = label;
-        btn.dataset.action = 'set-image-align';
+        btn.dataset.action = alignConfig.actionName;
         btn.dataset.align = value;
-        btn.classList.toggle('active', align === value);
+        btn.classList.toggle('active', alignConfig.currentValue === value);
         alignGroup.appendChild(btn);
     });
+    controls.appendChild(alignGroup);
 
     const presetsGroup = document.createElement('div');
     presetsGroup.className = 'content-image-presets-group';
@@ -301,7 +323,7 @@ function renderImage(item) {
     btn11.textContent = '1:1 (Reset)';
     btn11.title = 'Reimposta dimensioni originali';
     btn11.dataset.action = 'set-image-width';
-    btn11.dataset.width = 'auto'; // 'auto' forza l'immagine alla dimensione nativa
+    btn11.dataset.width = 'auto';
     btn11.classList.toggle('active', rawWidth === 'auto');
     presetsGroup.appendChild(btn11);
 
@@ -321,6 +343,7 @@ function renderImage(item) {
     btnMax.dataset.width = '100%';
     btnMax.classList.toggle('active', rawWidth === '100%');
     presetsGroup.appendChild(btnMax);
+    controls.appendChild(presetsGroup);
 
     const advWrap = document.createElement('div');
     advWrap.className = 'image-advanced-wrapper';
@@ -353,7 +376,6 @@ function renderImage(item) {
 
     const warningBox = document.createElement('div');
     warningBox.className = 'resolution-warning';
-
     const currentPxVal = typeof rawWidth === 'number' ? rawWidth : 0;
     const isExceeded = originalWidth > 0 && currentPxVal > originalWidth;
     warningBox.style.display = isExceeded ? 'block' : 'none';
@@ -363,26 +385,19 @@ function renderImage(item) {
     advDropdown.appendChild(inputPx);
     advDropdown.appendChild(infoOrig);
     advDropdown.appendChild(warningBox);
-
     advWrap.appendChild(advBtn);
     advWrap.appendChild(advDropdown);
-
-    controls.appendChild(pickBtn);
-    controls.appendChild(alignGroup);
-    controls.appendChild(presetsGroup);
     controls.appendChild(advWrap);
+    const mediaAlignClass = alignConfig.choices.length === 3 ? alignConfig.currentValue : 'center';
 
     const media = document.createElement('div');
-    media.className = `content-image-media align-${align}`;
+    media.className = `content-image-media align-${mediaAlignClass}`;
 
     if (rawWidth === 'auto') {
         media.style.width = 'max-content';
         media.style.maxWidth = '100%';
     } else if (typeof rawWidth === 'string' && rawWidth.endsWith('%')) {
         media.style.width = rawWidth;
-    } else if (typeof rawWidth === 'number') {
-        media.style.width = `${rawWidth}px`;
-        media.style.maxWidth = '100%';
     } else {
         media.style.width = `${rawWidth}px`;
         media.style.maxWidth = '100%';
@@ -392,11 +407,10 @@ function renderImage(item) {
     img.src = item.data.src;
     img.alt = item.data.caption || '';
     img.style.height = 'auto';
-
     media.appendChild(img);
 
     const caption = document.createElement('figcaption');
-    caption.className = `fc align-${align}`;
+    caption.className = `fc align-${mediaAlignClass}`;
     caption.contentEditable = 'true';
     caption.textContent = item.data.caption;
     caption.dataset.role = 'image-caption';
@@ -416,9 +430,14 @@ function renderImageText(item) {
     const wrap = document.createElement('div');
     wrap.className = `content-image-text position-${item.data.imagePosition}`;
 
-    const img = document.createElement('img');
-    img.src = item.data.imageSrc;
-    img.alt = item.data.imageCaption;
+    const figure = renderImageFigure(item, {
+        actionName: 'set-image-position',
+        currentValue: item.data.imagePosition,
+        choices: [
+            {value: 'left', label: 'Sinistra'},
+            {value: 'right', label: 'Destra'},
+        ],
+    });
 
     const text = document.createElement('div');
     text.className = 'body-text';
@@ -428,9 +447,9 @@ function renderImageText(item) {
 
     if (item.data.imagePosition === 'right') {
         wrap.appendChild(text);
-        wrap.appendChild(img);
+        wrap.appendChild(figure);
     } else {
-        wrap.appendChild(img);
+        wrap.appendChild(figure);
         wrap.appendChild(text);
     }
     return wrap;
@@ -632,7 +651,8 @@ function renderContentInsertGap(blockId, containerId, beforeItemId, containerDep
     const toggle = document.createElement('button');
     toggle.type = 'button';
     toggle.className = 'content-insert-gap-toggle';
-    toggle.textContent = '+ Aggiungi sottosezione';
+    toggle.textContent = '+';
+    toggle.title = 'Aggiungi sottosezione'
     toggle.dataset.action = 'toggle-content-inserter';
     toggle.dataset.blockId = blockId;
     toggle.dataset.containerId = containerId;

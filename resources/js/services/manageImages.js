@@ -121,3 +121,19 @@ export function mutateImageWidth(blockId, itemId, width) {
         }
     });
 }
+
+
+/**
+ * Sets which side of the text the image sits on for an imageText
+ * content-item. Distinct from setImageAlign: that's a 3-way float
+ * (left/ center /right) for a standalone image; this is a binary layout
+ * choice (left/right) for a two-column image+text block.
+ * @param {string} blockId
+ * @param {string} itemId
+ * @param {'left'|'right'} position
+ */
+export function setImagePosition(blockId, itemId, position) {
+    updateContentItemWith(blockId, itemId, data => {
+        data.imagePosition = position;
+    });
+}
