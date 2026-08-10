@@ -103,13 +103,22 @@ function findContentItem(content, id) {
  * @param {string} blockId - id of the top-level section block.
  * @param {string} containerId - id of the target container
  * @param {string} type
+ * @param {string|null} beforeItemId
  * @throws {Error} if the container isn't found, or depth cap is exceeded.
  */
-export function addContentItem(blockId, containerId, type) {
+export function addContentItem(blockId, containerId, type, beforeItemId = null) {
     updateBlockData(blockId, data => {
         const container = findContainer(data, containerId, blockId);
         if (!container) throw new Error(`Container not found: ${containerId}`);
-        container.content.push(createContentItem(type, container.depth));
+        const item = createContentItem(type, container.depth);
+        if (beforeItemId === null) {
+            container.content.push(item);
+            return;
+        }
+        const index = container.content.findIndex(existing => existing.id === beforeItemId);
+        if (index === -1) throw new Error(`No content item with id: ${beforeItemId}`);
+
+        container.content.splice(index, 0, item);
     });
 }
 

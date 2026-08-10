@@ -27,6 +27,12 @@ function onContentClick(e) {
         return;
     }
 
+    const gapBtn = e.target.closest('[data-action="toggle-content-inserter"]');
+    if (gapBtn) {
+        handleGapBtn(gapBtn);
+        return;
+    }
+
     const addBtn = e.target.closest('[data-action="add-content-item"]');
     if (addBtn) {
         addContentItem(addBtn.dataset.blockId, addBtn.dataset.containerId, addBtn.dataset.type);
@@ -45,6 +51,22 @@ function onContentClick(e) {
         const parentItemId = styleBtn.dataset.parentItemId || null;
         showListSettingsModal(itemBlockId(styleBtn), itemId(styleBtn), parentItemId);
     }
+}
+
+/**
+ * @param {HTMLElement} gapBtn
+ */
+function handleGapBtn(gapBtn) {
+    const gap = gapBtn.closest('.content-insert-gap');
+    const isOpen = gap.classList.contains('is-open');
+    closeContentInserters();
+    if (!isOpen) gap.classList.add('is-open');
+}
+
+function closeContentInserters() {
+    contentEl.querySelectorAll('.content-insert-gap.is-open').forEach(gap => {
+        gap.classList.remove('is-open');
+    });
 }
 
 /**

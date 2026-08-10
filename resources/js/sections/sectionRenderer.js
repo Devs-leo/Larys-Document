@@ -69,7 +69,10 @@ function renderSectionBlock(block) {
 
 
     const ctx = {blockId: block.id, containerDepth: 0};
-    block.data.content.forEach(item => {
+    block.data.content.forEach((item, index) => {
+        if (index > 0) {
+            body.appendChild(renderContentInsertGap(block.id, block.id, block.data.content[index].id, 0))
+        }
         body.appendChild(renderContentItem(item, ctx));
     });
     body.appendChild(renderAddContentBar(block.id, block.id, 0));
@@ -341,7 +344,12 @@ function renderSubsection(item, ctx) {
     body.dataset.subsectionAllowed = String(isSubsectionAllowed(item.data.depth));
 
     const childCtx = {blockId: ctx.blockId, containerDepth: item.data.depth};
-    item.data.content.forEach(child => body.appendChild(renderContentItem(child, childCtx)));
+    item.data.content.forEach((child, index) => {
+        if (index > 0) {
+            body.appendChild(renderContentInsertGap(ctx.blockId, item.id, item.data.content[index].id, item.data.depth));
+        }
+        body.appendChild(renderContentItem(child, childCtx));
+    });
     body.appendChild(renderAddContentBar(ctx.blockId, item.id, item.data.depth));
     el.appendChild(body);
 
@@ -420,31 +428,77 @@ const ADDABLE_TYPES = [
  * @param {string} blockId
  * @param {string} containerId
  * @param {number} containerDepth
+ * @param {string|null} beforeItemId
  * @returns {HTMLElement}
  */
-function renderAddContentBar(blockId, containerId, containerDepth) {
+function renderAddContentBar(blockId, containerId, containerDepth, beforeItemId = null) {
     const bar = document.createElement('div');
     bar.className = 'add-content-bar';
+    if (beforeItemId !== null) bar.dataset.beforeItemId = beforeItemId;
+
     if (isSubsectionAllowed(containerDepth)) {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = '+ Sottosezione';
-        btn.dataset.action = 'add-content-item';
-        btn.dataset.blockId = blockId;
-        btn.dataset.containerId = containerId;
-        btn.dataset.type = 'subsection';
-        bar.appendChild(btn);
+        bar.appendChild(renderAddContentButton(blockId, containerId, 'subsection', '+ Sottosezione', beforeItemId));
     }
 
     ADDABLE_TYPES.forEach(({type, label}) => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = `+ ${label}`;
-        btn.dataset.action = 'add-content-item';
-        btn.dataset.blockId = blockId;
-        btn.dataset.containerId = containerId;
-        btn.dataset.type = type;
-        bar.appendChild(btn);
+        // const btn = document.createElement('button');
+        // btn.type = 'button';
+        // btn.textContent = `+ ${label}`;
+        // btn.dataset.action = 'add-content-item';
+        // btn.dataset.blockId = blockId;
+        // btn.dataset.containerId = containerId;
+        // btn.dataset.type = type;
+        bar.appendChild(renderAddContentButton(blockId, containerId, type, `+ ${label}`, beforeItemId));
     });
     return bar;
+}
+
+/**
+ * @param {string} blockId
+ * @param {string} containerId
+ * @param {string} type
+ * @param {string} label
+ * @param {string} beforeItemId
+ * @returns {HTMLElement}
+ */
+function renderAddContentButton(blockId, containerId, type, label, beforeItemId) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = label;
+    btn.dataset.action = 'add-content-item';
+    btn.dataset.blockId = blockId;
+    btn.dataset.containerId = containerId;
+    btn.dataset.type = type;
+    if(beforeItemId !== null) btn.dataset.beforeItemId = beforeItemId;
+    return btn;
+}
+
+/**
+ *
+ * @param {string} blockId
+ * @param {string} containerId
+ * @param {string} beforeItemId
+ * @param {number} containerDepth
+ * @returns {HTMLDivElement}
+ */
+function renderContentInsertGap(blockId, containerId, beforeItemId, containerDepth) {
+    const gap = document.createElement('div');
+    gap.className = 'content-insert-gap';
+    gap.dataset.blockId = blockId;
+    gap.dataset.containerId = containerId;
+    gap.dataset.beforeItemId = beforeItemId;
+    gap.dataset.depth = String(containerDepth);
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'content-insert-gap-toggle';
+    toggle.textContent = '+ Aggiungi sottosezione';
+    toggle.dataset.action = 'toggle-content-inserter';
+    toggle.dataset.blockId = blockId;
+    toggle.dataset.containerId = containerId;
+    toggle.dataset.beforeItemId = beforeItemId;
+    gap.appendChild(toggle);
+
+    gap.appendChild(renderAddContentBar(blockId, containerId, containerDepth, beforeItemId));
+    return gap;
 }
