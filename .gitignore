@@ -15,3 +15,4 @@ neutralino.js
 .idea/
 .tmp/
 .github/
+/node_modules/

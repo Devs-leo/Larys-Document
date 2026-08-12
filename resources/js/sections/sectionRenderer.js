@@ -77,6 +77,17 @@ function renderSectionBlock(block) {
     });
     body.appendChild(renderAddContentBar(block.id, block.id, 0));
     el.appendChild(body);
+    const rail = document.createElement('div');
+    rail.className = 'section-reorder-rail';
+    const railBtn = document.createElement('button');
+    railBtn.type = 'button';
+    railBtn.className = 'section-reorder-btn';
+    railBtn.textContent = '⇅';
+    railBtn.title = 'Riordina contenuto sezione';
+    railBtn.dataset.action = 'open-section-reorder';
+    railBtn.dataset.blockId = block.id;
+    rail.appendChild(railBtn);
+    el.appendChild(rail);
     el.appendChild(renderSectionControls(block.id));
     return el;
 }
@@ -189,6 +200,15 @@ function renderListLevel(items, style, parentItemId) {
     styleBtn.dataset.role = 'list-style-toggle';
     styleBtn.dataset.parentItemId = parentItemId ?? '';
     controls.appendChild(styleBtn);
+
+    const reorderBtn = document.createElement('button');
+    reorderBtn.type = 'button';
+    reorderBtn.className = 'list-reorder-btn';
+    reorderBtn.textContent = '⇅';
+    reorderBtn.title = 'Riordina elenco';
+    reorderBtn.dataset.action = 'open-list-reorder';
+    reorderBtn.dataset.parentItemId = parentItemId ?? '';
+    controls.appendChild(reorderBtn);
 
     const addBtn = document.createElement('button');
     addBtn.type = 'button';

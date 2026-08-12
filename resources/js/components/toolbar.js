@@ -1,5 +1,6 @@
 import {updateTheme, resetState, addBlock} from "../state.js";
 import {showConfirmModal} from "./confirmModal.js";
+import {openReorderModal} from "./reorderModal.js";
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -12,6 +13,7 @@ const el = {
     tutorialBtn: document.getElementById('tutorial-btn'),
     addSectionBtn: document.getElementById('add-section-btn'),
     addSignatureBtn: document.getElementById('add-section-right-btn'),
+    reorderSectionsBtn: document.getElementById('reorder-sections-btn'),
 }
 
 /**
@@ -60,6 +62,8 @@ export function bindToolbarEvents() {
     el.tutorialBtn.addEventListener('click', () => {
         //TODO aprire un modale con una sezione HTML iniettabile con la spiegazione della app, a app finita
     });
+
+    el.reorderSectionsBtn.addEventListener('click', () => openReorderModal({scope: 'document'}));
 }
 
 /**

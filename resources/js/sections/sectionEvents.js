@@ -17,6 +17,7 @@ import {
     setImageSource,
     setImageWidth
 } from "../services/manageImages.js";
+import {openReorderModal} from "../components/reorderModal.js";
 
 const contentEl = document.getElementById('content');
 
@@ -108,6 +109,24 @@ async function onContentClick(e) {
     const positionBtn = e.target.closest('[data-action="set-image-position"]');
     if (positionBtn) {
         setImagePosition(itemBlockId(positionBtn), itemId(positionBtn), positionBtn.dataset.align);
+        return;
+    }
+
+    const sectionReorderBtn = e.target.closest('[data-action="open-section-reorder"]');
+    if (sectionReorderBtn) {
+        openReorderModal({scope: 'section', blockId: sectionReorderBtn.dataset.blockId});
+        return;
+    }
+
+    const listReorderBtn = e.target.closest('[data-action="open-list-reorder"]');
+    if (listReorderBtn) {
+        const parentItemId = listReorderBtn.dataset.parentItemId || null;
+        openReorderModal({
+            scope: 'list',
+            blockId: itemBlockId(listReorderBtn),
+            listItemId: itemId(listReorderBtn),
+            parentItemId,
+        });
         return;
     }
 }
