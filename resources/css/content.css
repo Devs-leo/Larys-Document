@@ -611,3 +611,22 @@ figure.content-image {
     color: var(--accent);
     border-color: var(--accent);
 }
+
+.toc-position-options {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.toc-position-options button {
+    flex: 1;
+    border: 1px solid var(--line);
+    background: #fafafa;
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+.toc-position-options button.active {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}

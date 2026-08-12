@@ -2,6 +2,7 @@ import {updateTheme, resetState, addBlock} from "../state.js";
 import {showConfirmModal} from "./confirmModal.js";
 import {openReorderModal} from "./reorderModal.js";
 import {loadDraft, saveDraft} from "../services/storage.js";
+import {showTocSettingsModal} from "./tocSettigsModal.js";
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -17,6 +18,7 @@ const el = {
     reorderSectionsBtn: document.getElementById('reorder-sections-btn'),
     saveDocBtn: document.getElementById('save-doc-btn'),
     loadDraftInput: document.getElementById('load-draft-input'),
+    tocSettingsBtn: document.getElementById('toc-settings-btn'),
 }
 
 /**
@@ -88,6 +90,8 @@ export function bindToolbarEvents() {
             await showConfirmModal('Caricamento non riuscito. Controlla la console per i dettagli.');
         }
     });
+
+    el.tocSettingsBtn.addEventListener('click', showTocSettingsModal);
 }
 
 /**

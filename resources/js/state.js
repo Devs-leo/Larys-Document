@@ -19,6 +19,7 @@ import {createObservable, createRegistry, uid} from "./utils.js";
  * @property {string} eyebrow - the subtitle or the lead of the document.
  * @property {string} meta - other info as author and date.
  * @property {Theme} theme - the document theme.
+ * @property {string} tocPosition
  * @property {Block[]} sections - order list of section in the document.
  */
 
@@ -34,6 +35,7 @@ function defaultState() {
         eyebrow: "Sottotitolo",
         meta: "Autore, data",
         theme: {primary: "#0B1330", secondary: "#B5792A"},
+        tocPosition: 'top',
         sections: [],
     };
 }
@@ -190,4 +192,16 @@ export function mutateBlockData(blockId, mutatorFn){
         const b = s.sections.find(b => b.id === blockId);
         if (b) mutatorFn(b.data);
     })
+}
+
+
+/**
+ * Sets where the table of contents renders in the exported PDF
+ * ('top' = right after the cover, 'bottom' = end of document).
+ * Structural preference, not a per-export prompt — persists with the
+ * document like theme does.
+ * @param {'top'|'bottom'} position
+ */
+export function setTocPosition(position) {
+    store.set(s => { s.tocPosition = position; return s; });
 }
