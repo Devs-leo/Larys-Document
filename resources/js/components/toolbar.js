@@ -1,6 +1,7 @@
 import {updateTheme, resetState, addBlock} from "../state.js";
 import {showConfirmModal} from "./confirmModal.js";
 import {openReorderModal} from "./reorderModal.js";
+import {loadDraft, saveDraft} from "../services/storage.js";
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -14,6 +15,8 @@ const el = {
     addSectionBtn: document.getElementById('add-section-btn'),
     addSignatureBtn: document.getElementById('add-section-right-btn'),
     reorderSectionsBtn: document.getElementById('reorder-sections-btn'),
+    saveDocBtn: document.getElementById('save-doc-btn'),
+    loadDraftInput: document.getElementById('load-draft-input'),
 }
 
 /**
@@ -64,6 +67,27 @@ export function bindToolbarEvents() {
     });
 
     el.reorderSectionsBtn.addEventListener('click', () => openReorderModal({scope: 'document'}));
+
+    el.saveDocBtn.addEventListener('click', async () => {
+        try {
+            await saveDraft();
+        } catch (err) {
+            console.error('Errore salvataggio bozza:', err);
+            await showConfirmModal('Salvataggio non riuscito. Controlla la console per i dettagli.');
+        }
+    });
+
+    el.loadDraftInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        e.target.value = ''; // permette di riselezionare lo stesso file e ritriggerare 'change'
+        if (!file) return;
+        try {
+            await loadDraft(file);
+        } catch (err) {
+            console.error('Errore caricamento bozza:', err);
+            await showConfirmModal('Caricamento non riuscito. Controlla la console per i dettagli.');
+        }
+    });
 }
 
 /**
