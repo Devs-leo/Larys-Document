@@ -248,3 +248,19 @@ export function getContentItemData(blockId, itemId) {
     const found = findContentItem(block.data.content, itemId);
     return found ? found.item.data : null;
 }
+
+/**
+ * Read-only lookup of a container's own ordered content array by id —
+ * the section's own top-level content (containerId === blockId), or a
+ * nested subsection's content at any depth. Used by the reorder modal
+ * so it can list — and later save the new order of — whichever
+ * container the user opened, not just the section's top level.
+ * @param {string} blockId
+ * @param {string} containerId
+ * @returns {{content: ContentItem[], depth: number}|null}
+ */
+export function getContainerContent(blockId, containerId) {
+    const block = getState().sections.find(b => b.id === blockId);
+    if (!block) return null;
+    return findContainer(block.data, containerId, blockId);
+}

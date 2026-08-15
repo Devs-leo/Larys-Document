@@ -1,8 +1,7 @@
 import {getState} from "../state.js";
-import {renderCover, bindCoverEvents} from "./content.js";
-import {renderToolbar, bindToolbarEvents} from "./toolbar.js";
-import {renderSection} from "../sections/sectionRenderer.js";
-import {bindSectionEvents} from "../sections/sectionEvents.js";
+import {renderCover} from "./content.js";
+import {renderToolbar} from "./toolbar.js";
+import {renderSection} from "../sections/render/sectionRenderer.js";
 
 const pageEl = document.getElementById("page");
 
@@ -25,5 +24,3 @@ function applyTheme(theme) {
     pageEl.style.setProperty('--navy', theme.primary);
     pageEl.style.setProperty('--accent', theme.secondary);
 }
-
-export {bindCoverEvents, bindToolbarEvents, bindSectionEvents};

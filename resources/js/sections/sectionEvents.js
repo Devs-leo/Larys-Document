@@ -1,39 +1,29 @@
 import {getState, updateBlock, removeBlock} from "../state.js";
 import {
     addContentItem,
-    getBlockLabel, getContentItemData,
+    getBlockLabel,
     mutateContentItemData,
     mutateContentItemWith
 } from "./sectionManager.js";
-import {normalizeEmptyEditable} from "../utils.js";
+import {normalizeEmptyEditable, itemBlockId, itemId} from "../utils.js";
 import {addListItem, updateListItemText} from "./listManager.js";
 import {showConfirmModal} from "../components/confirmModal.js";
 import {showListSettingsModal} from '../components/listSettingsModal.js';
-import {
-    mutateImageWidth,
-    pickImageSource,
-    scaleImageWidth,
-    setImageAlign, setImagePosition,
-    setImageSource,
-    setImageWidth
-} from "../services/manageImages.js";
 import {openReorderModal} from "../components/reorderModal.js";
+import {bindImageEvents} from "./imageEvents.js";
 
 const contentEl = document.getElementById('content');
 
+/**
+ * Wires content-area event delegation: structural actions on blocks/
+ * content items (click) and free-text sync to state (input). Image
+ * toolbar interactions live in imageEvents.js — bound here too, so
+ * callers only need to invoke bindSectionEvents once.
+ */
 export function bindSectionEvents() {
     contentEl.addEventListener('click', onContentClick);
     contentEl.addEventListener('input', onContentInput);
-    contentEl.addEventListener('change', inputSizeImageInput);
-}
-
-function inputSizeImageInput(e) {
-    if (e.target.dataset.role === 'image-width-px') {
-        const val = Number(e.target.value);
-        if (val && val > 0) {
-            setImageWidth(itemBlockId(e.target), itemId(e.target), String(val));
-        }
-    }
+    bindImageEvents();
 }
 
 /**
@@ -66,55 +56,13 @@ async function onContentClick(e) {
         return;
     }
 
-    const imageBtn = e.target.closest('[data-action="pick-image-source"]');
-    if (imageBtn) {
-        const imageData = await pickImageSource();
-        if (imageData) {
-            setImageSource(itemBlockId(imageBtn), itemId(imageBtn), imageData);
-        }
-        return;
-    }
-
-    const alignBtn = e.target.closest('[data-action="set-image-align"]');
-    if (alignBtn) {
-        setImageAlign(itemBlockId(alignBtn), itemId(alignBtn), alignBtn.dataset.align);
-        return;
-    }
-
-    const widthBtn = e.target.closest('[data-action="set-image-width"]');
-    if (widthBtn) {
-        setImageWidth(itemBlockId(widthBtn), itemId(widthBtn), widthBtn.dataset.width);
-        return;
-    }
-
-    const scaleBtn = e.target.closest('[data-action="scale-image"]');
-    if (scaleBtn) {
-        const factor = Number(scaleBtn.dataset.scale);
-        scaleImageWidth(itemBlockId(scaleBtn), itemId(scaleBtn), factor);
-        return;
-    }
-
-    const toggleAdvBtn = e.target.closest('[data-action="toggle-image-advanced"]');
-    if (toggleAdvBtn) {
-        const wrapper = toggleAdvBtn.closest('.image-advanced-wrapper');
-        if (wrapper) {
-            document.querySelectorAll('.image-advanced-wrapper.is-open').forEach(w => {
-                if (w !== wrapper) w.classList.remove('is-open');
-            });
-            wrapper.classList.toggle('is-open');
-        }
-        return;
-    }
-
-    const positionBtn = e.target.closest('[data-action="set-image-position"]');
-    if (positionBtn) {
-        setImagePosition(itemBlockId(positionBtn), itemId(positionBtn), positionBtn.dataset.align);
-        return;
-    }
-
     const sectionReorderBtn = e.target.closest('[data-action="open-section-reorder"]');
     if (sectionReorderBtn) {
-        openReorderModal({scope: 'section', blockId: sectionReorderBtn.dataset.blockId});
+        openReorderModal({
+            scope: 'section',
+            blockId: sectionReorderBtn.dataset.blockId,
+            containerId: sectionReorderBtn.dataset.containerId || sectionReorderBtn.dataset.blockId,
+        });
         return;
     }
 
@@ -160,6 +108,7 @@ async function handleRemoveBlock(blockId) {
 
 /**
  * Route typing in any contenteditable filed inside #content to correct state mutation based on its data-role.
+ * (image-width-px is handled by imageEvents.js's own 'input' listener.)
  * @param {InputEvent} e
  */
 function onContentInput(e) {
@@ -183,9 +132,6 @@ function onContentInput(e) {
         case 'image-text-body':
             mutateContentItemData(itemBlockId(el), itemId(el), {html: el.innerHTML});
             break;
-        case 'image-width-px':
-            handleImagePixelWidthInput(el);
-            break;
         case 'image-caption':
             mutateContentItemData(itemBlockId(el), itemId(el), {caption: el.textContent});
             break;
@@ -198,43 +144,6 @@ function onContentInput(e) {
     }
 }
 
-
-function handleImagePixelWidthInput(el) {
-    const val = Number(el.value);
-    const figure = el.closest('figure.content-image');
-    if (!figure) return;
-
-    const blockId = itemBlockId(el);
-    const currentItemId = itemId(el);
-    const itemData = getContentItemData(blockId, currentItemId);
-    const originalWidth = itemData?.originalWidth || 0;
-
-    const media = figure.querySelector('.content-image-media');
-    const warningBox = figure.querySelector('.resolution-warning');
-
-    if (val && val > 0) {
-        if (media) {
-            media.style.width = `${val}px`;
-            media.style.maxWidth = '100%';
-        }
-        if (warningBox && originalWidth > 0) {
-            if (val > originalWidth) {
-                warningBox.style.display = 'block';
-                warningBox.innerHTML = `⚠️ <strong>Attenzione:</strong> La larghezza impostata (${val}px) supera quella originale (${originalWidth}px). L'immagine potrebbe risultare sgranata.`;
-            } else {
-                warningBox.style.display = 'none';
-            }
-        }
-        mutateImageWidth(blockId, currentItemId, val);
-    } else if (el.value === '') {
-        if (media) {
-            media.style.width = 'max-content';
-        }
-        if (warningBox) warningBox.style.display = 'none';
-        mutateImageWidth(blockId, currentItemId, 'auto');
-    }
-}
-
 /**
  * @param {HTMLElement} el
  */
@@ -242,20 +151,4 @@ function handleTableCellInput(el) {
     const row = Number(el.dataset.row);
     const col = Number(el.dataset.col);
     mutateContentItemWith(itemBlockId(el), itemId(el), data => data.rows[row][col] = el.innerHTML);
-}
-
-/**
- * @param {HTMLElement} el
- * @returns {string}
- */
-function itemBlockId(el) {
-    return el.closest('[data-item-id]').dataset.blockId;
-}
-
-/**
- * @param {HTMLElement} el
- * @returns {string}
- */
-function itemId(el) {
-    return el.closest('[data-item-id]').dataset.itemId;
 }

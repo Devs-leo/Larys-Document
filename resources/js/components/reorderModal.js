@@ -1,6 +1,6 @@
 import {showConfirmModal} from "./confirmModal.js";
 import {getState, removeBlock, setSections} from "../state.js";
-import {getBlockLabel, removeContentItem, setContentItems} from "../sections/sectionManager.js";
+import {getBlockLabel, getContainerContent, removeContentItem, setContentItems} from "../sections/sectionManager.js";
 import {getDropIndex} from "../utils.js";
 import {getListLevel} from "../sections/listManager.js";
 import {removeListItem, setListItems} from "../sections/listManager.js";
@@ -28,7 +28,7 @@ const titleEl = overlay.querySelector('.reorder-modal-title');
 const listEl = overlay.querySelector('.reorder-modal-list');
 
 /**
- * @type {{scope: 'document'}|{scope: 'section', blockId: string}|{scope:'list', blockId:string, listItemId:string, parentItemId:string|null}|null}
+ * @type {{scope: 'document'}|{scope: 'section', blockId: string, containerId: string}|{scope:'list', blockId:string, listItemId:string, parentItemId:string|null}|null}
  */
 let context = null;
 let entries = [];
@@ -49,9 +49,9 @@ function handleSave() {
         const byId = new Map(getState().sections.map(b => [b.id, b]));
         setSections(ids.map(id => byId.get(id)).filter(Boolean));
     } else if (context.scope === 'section') {
-        const block = getState().sections.find(b => b.id === context.blockId);
-        const byId = new Map((block?.data.content ?? []).map(it => [it.id, it]));
-        setContentItems(context.blockId, context.blockId, ids.map(id => byId.get(id)).filter(Boolean));
+        const container = getContainerContent(context.blockId, context.containerId);
+        const byId = new Map((container?.content ?? []).map(it => [it.id, it]));
+        setContentItems(context.blockId, context.containerId, ids.map(id => byId.get(id)).filter(Boolean));
     } else {
         const level = getListLevel(context.blockId, context.listItemId, context.parentItemId);
         const byId = new Map((level?.items ?? []).map(it => [it.id, it]));
@@ -69,22 +69,30 @@ function close() {
 /**
  * Opens the reorder modal.
  * - {scope:'document'}: sections + signature blocks, by title/label only.
- * - {scope:'section', blockId}: that section's own top-level content
- *   items (paragraphs, lists, images, tables, subsections — subsections
- *   listed by their title, not expanded).
+ * - {scope:'section', blockId, containerId}: one container's own
+ *   top-level content items (paragraphs, lists, images, tables,
+ *   subsections — subsections listed by their title, not expanded).
+ *   containerId defaults to blockId (the section's own top-level
+ *   content); pass a subsection's id instead to reorder that
+ *   subsection's own content, at any nesting depth.
  * Works entirely on a local copy; nothing is written until "Salva".
- * @param {{scope:'document'}|{scope:'section', blockId:string}} ctx
+ * @param {{scope:'document'}|{scope:'section', blockId:string, containerId?:string}} ctx
  */
 export function openReorderModal(ctx) {
-    context = ctx;
     if (ctx.scope === 'document') {
+        context = ctx;
         titleEl.textContent = 'Riordina sezioni';
         entries = getState().sections.map(b => ({id: b.id, label: getBlockLabel(b)}));
     } else if (ctx.scope === 'section') {
-        titleEl.textContent = 'Riordina contenuto sezione';
-        const block = getState().sections.find(b => b.id === ctx.blockId);
-        entries = (block?.data.content ?? []).map(it => ({id: it.id, label: labelForItem(it)}));
+        const containerId = ctx.containerId ?? ctx.blockId;
+        context = {...ctx, containerId};
+        titleEl.textContent = containerId === ctx.blockId
+            ? 'Riordina contenuto sezione'
+            : 'Riordina contenuto sottosezione';
+        const container = getContainerContent(ctx.blockId, containerId);
+        entries = (container?.content ?? []).map(it => ({id: it.id, label: labelForItem(it)}));
     } else {
+        context = ctx;
         titleEl.textContent = 'Riordina elenco';
         const level = getListLevel(ctx.blockId, ctx.listItemId, ctx.parentItemId);
         entries = (level?.items ?? []).map(it => ({id: it.id, label: stripHtml(it.html) || '(vuoto)'}));

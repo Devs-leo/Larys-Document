@@ -112,3 +112,28 @@ export function normalizeEmptyEditable(el) {
         el.innerHTML = '';
     }
 }
+
+// ______________________________________________________________________
+// Shared content-item DOM lookups
+// ______________________________________________________________________
+
+/**
+ * Walks up from a control/field to its nearest content-item wrapper and
+ * reads the owning section block's id. Shared by sectionEvents.js and
+ * imageEvents.js since both route DOM events back to state by id.
+ * @param {HTMLElement} el
+ * @returns {string}
+ */
+export function itemBlockId(el) {
+    return el.closest('[data-item-id]').dataset.blockId;
+}
+
+/**
+ * Walks up from a control/field to its nearest content-item wrapper and
+ * reads that item's own id.
+ * @param {HTMLElement} el
+ * @returns {string}
+ */
+export function itemId(el) {
+    return el.closest('[data-item-id]').dataset.itemId;
+}

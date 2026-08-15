@@ -1,8 +1,6 @@
-import {updateTheme, resetState, addBlock} from "../state.js";
+import {updateTheme, resetState} from "../state.js";
 import {showConfirmModal} from "./confirmModal.js";
-import {openReorderModal} from "./reorderModal.js";
 import {loadDraft, saveDraft} from "../services/storage.js";
-import {showTocSettingsModal} from "./tocSettigsModal.js";
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -13,12 +11,8 @@ const el = {
     secondaryInput: document.getElementById('color-secondary'),
     newDocBtn: document.getElementById('new-doc-btn'),
     tutorialBtn: document.getElementById('tutorial-btn'),
-    addSectionBtn: document.getElementById('add-section-btn'),
-    addSignatureBtn: document.getElementById('add-section-right-btn'),
-    reorderSectionsBtn: document.getElementById('reorder-sections-btn'),
     saveDocBtn: document.getElementById('save-doc-btn'),
     loadDraftInput: document.getElementById('load-draft-input'),
-    tocSettingsBtn: document.getElementById('toc-settings-btn'),
 }
 
 /**
@@ -33,13 +27,13 @@ const PRESETS = {
 };
 
 /**
- * Toolbar controls connections.
+ * Toolbar controls connections: theme presets/colours, settings panel,
+ * new document, and draft save/load. Document-structure actions (add
+ * section, reorder sections, TOC position) live in documentControls.js.
  */
 export function bindToolbarEvents() {
     el.settingsBtn.addEventListener('click', () => el.settingsPanel.classList.add('open'));
     el.closeBtn.addEventListener('click', () => el.settingsPanel.classList.remove('open'));
-    el.addSectionBtn.addEventListener('click', () => addBlock('section'));
-    el.addSignatureBtn.addEventListener('click', () => addBlock('signature'));
 
     el.presetBtns.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -68,8 +62,6 @@ export function bindToolbarEvents() {
         //TODO aprire un modale con una sezione HTML iniettabile con la spiegazione della app, a app finita
     });
 
-    el.reorderSectionsBtn.addEventListener('click', () => openReorderModal({scope: 'document'}));
-
     el.saveDocBtn.addEventListener('click', async () => {
         try {
             await saveDraft();
@@ -90,8 +82,6 @@ export function bindToolbarEvents() {
             await showConfirmModal('Caricamento non riuscito. Controlla la console per i dettagli.');
         }
     });
-
-    el.tocSettingsBtn.addEventListener('click', showTocSettingsModal);
 }
 
 /**
