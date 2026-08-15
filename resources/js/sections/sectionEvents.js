@@ -49,6 +49,15 @@ async function onContentClick(e) {
         return;
     }
 
+    // "+ voce" (root/level button, dataset.parentItemId = '' or a level id)
+    // and the per-item "+" nested-bullet button both use this action.
+    const addListItemBtn = e.target.closest('[data-action="add-list-item"]');
+    if (addListItemBtn) {
+        const parentItemId = addListItemBtn.dataset.parentItemId || null;
+        addListItem(itemBlockId(addListItemBtn), itemId(addListItemBtn), parentItemId);
+        return;
+    }
+
     const styleBtn = e.target.closest('[data-role="list-style-toggle"]');
     if (styleBtn) {
         const parentItemId = styleBtn.dataset.parentItemId || null;

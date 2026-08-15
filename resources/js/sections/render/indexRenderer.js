@@ -1,6 +1,12 @@
 const indexListEl = document.getElementById('index-list');
 const indexEmptyEl = document.getElementById('index-empty');
 
+// How much each depth level indents in the TOC. Depth 0 = section
+// title (no indent), depth 1 = first-level subsection, depth 2 =
+// second-level subsection. Kept here (not just as a CSS class) so the
+// indent is guaranteed even if the toc-depth-N rules aren't defined.
+const TOC_INDENT_EM = 1.5;
+
 /**
  * Rebuilds the TOC from state. Only "section" blocks produce a top-level
  * entry (signature blocks are excluded on purpose). Nested subsections
@@ -33,6 +39,7 @@ export function renderIndex(state) {
 function renderIndexEntry(anchorId, title, depth) {
     const li = document.createElement('li');
     li.className = `toc-depth-${depth}`;
+    li.style.paddingLeft = `${depth * TOC_INDENT_EM}em`;
 
     const a = document.createElement('a');
     a.href = `#section-${anchorId}`;
