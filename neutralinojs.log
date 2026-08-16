@@ -1,0 +1,47 @@
+INFO 2026-08-16 10:20:03,343 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:20:05,803 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:20:06,150 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 10:21:53,679 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:21:55,641 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:21:56,132 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 10:22:53,180 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:22:55,078 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:22:55,802 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 10:23:12,350 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 10:23:12,576 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:07:27,236 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:07:29,638 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:07:30,512 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:10:56,131 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:10:58,665 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:10:59,004 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:26:54,145 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:26:56,605 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:26:58,025 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:00,419 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:28:00,786 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:03,825 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:28:04,124 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:06,913 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:28:07,145 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:09,480 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:28:09,935 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:11,330 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:11,485 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:28:12,984 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:28:17,376 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:28:17,516 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:32:01,667 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:32:03,465 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:32:04,943 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:33:11,852 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:33:11,852 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:33:11,852 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:33:12,183 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:36:17,185 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:36:17,420 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:38:26,735 Reloading the application... D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:38:26,984 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+INFO 2026-08-16 11:39:48,687 Auth info was exported to ./.tmp/auth_info.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:14 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:39:50,972 NE_RS_UNBLDRE: Unable to load application resource file /resources/favicon.ico D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO
+ERROR 2026-08-16 11:39:52,564 NE_RS_UNBLDRE: Unable to load application resource file /resources/.well-known/appspecific/com.chrome.devtools.json D:\a\neutralinojs\neutralinojs\api\debug\debug.cpp:17 leoda@DESKTOP-IPV47MO

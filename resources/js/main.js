@@ -4,6 +4,7 @@ import {bindCoverEvents} from "./components/content.js";
 import {bindToolbarEvents} from "./components/toolbar.js";
 import {bindDocumentControls} from "./components/documentControls.js";
 import {bindSectionEvents} from "./sections/sectionEvents.js";
+import {bindPdfExport} from "./services/pdfExport.js"
 
 /**
  * Function to handle the window close event by gracefully exiting the Neutralino application.
@@ -22,6 +23,7 @@ bindCoverEvents();
 bindToolbarEvents();
 bindDocumentControls();
 bindSectionEvents();
+bindPdfExport();
 
 onChange(render);
 render();
