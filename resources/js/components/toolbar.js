@@ -1,6 +1,7 @@
 import {updateTheme, resetState} from "../state.js";
 import {showConfirmModal} from "./confirmModal.js";
 import {loadDraft, saveDraft} from "../services/storage.js";
+import {showTutorialModal} from "./tutorialModal.js"
 
 const el = {
     settingsBtn: document.getElementById('settings-btn'),
@@ -21,7 +22,7 @@ const el = {
  * @type {Object.<string, {primary: string, secondary: string}|null>}
  */
 const PRESETS = {
-    larys: {primary: '#0B1330', secondary: '#B5792A'},
+    larys: {primary: '#050a37', secondary: '#FFFFFF'},
     neutro: {primary: '#3A3A3A', secondary: '#8A8A8A'},
     custom: null
 };
@@ -58,9 +59,7 @@ export function bindToolbarEvents() {
         }
     });
 
-    el.tutorialBtn.addEventListener('click', () => {
-        //TODO aprire un modale con una sezione HTML iniettabile con la spiegazione della app, a app finita
-    });
+    el.tutorialBtn.addEventListener('click', showTutorialModal);
 
     el.saveDocBtn.addEventListener('click', async () => {
         try {

@@ -18,13 +18,13 @@ function renderRichHtml(html = '') {
 }
 
 function renderCover(state) {
-    const logo = document.querySelector('#logo-slot')?.innerHTML?.trim() || '';
+    const logo = document.querySelector('#logo-slot')?.innerHTML?.trim() || '<img src="../assets/logo.png" alt="Logo">';
 
     return `
         <section class="pdf-cover">
             <div class="pdf-cover-main">
-                ${state.eyebrow ? `<div class="pdf-eyebrow">${escapeHtml(state.eyebrow)}</div>` : ''}
                 <h1>${escapeHtml(state.title)}</h1>
+                ${state.eyebrow ? `<div class="pdf-eyebrow">${escapeHtml(state.eyebrow)}</div>` : ''}
                 ${state.meta ? `<div class="pdf-cover-meta">${escapeHtml(state.meta)}</div>` : ''}
             </div>
             ${logo ? `<div class="pdf-cover-logo">${logo}</div>` : ''}
@@ -35,8 +35,13 @@ function renderCover(state) {
 function renderHeaderFooter(state) {
     return `
         <div class="pdf-running-header">${escapeHtml(state.title)}</div>
+        
+        <!-- ELEMENTI FOOTER SEPARATI (Approccio Nativo Paged.js) -->
         <div class="pdf-running-footer-left">${escapeHtml(state.meta)}</div>
-        <div class="pdf-running-footer-right">Larys Consulting</div>
+        <div class="pdf-running-footer-center"></div>
+        <div class="pdf-running-footer-right">
+            <img src="../assets/logo.png" alt="Logo" />
+        </div>
     `;
 }
 
@@ -228,7 +233,7 @@ export function renderPdfDocument(state = getState()) {
     const topToc = state.tocPosition !== 'bottom';
 
     return `
-        <div class="pdf-document" style="--pdf-primary:${escapeHtml(state.theme?.primary || '#0B1330')};--pdf-secondary:${escapeHtml(state.theme?.secondary || '#B5792A')}">
+        <div class="pdf-document" style="--pdf-primary:${escapeHtml(state.theme?.primary || '#050a37')};--pdf-secondary:${escapeHtml(state.theme?.secondary || '#FFFFFF')}">
             ${renderHeaderFooter(state)}
             ${renderCover(state)}
             ${topToc ? toc : ''}

@@ -34,7 +34,7 @@ function defaultState() {
         title: "Titolo del documento",
         eyebrow: "Sottotitolo",
         meta: "Autore, data",
-        theme: {primary: "#0B1330", secondary: "#B5792A"},
+        theme: {primary: "#050a37", secondary: "#FFFFFF"},
         tocPosition: 'top',
         sections: [],
     };

@@ -1,10 +1,10 @@
 :root {
-    --navy: #0B1330;
+    --navy: #050a37;
     --navy-2: #141B42;
     --paper: #FAF8F3;
     --ink: #1C1F2B;
     --muted: #6B7280;
-    --accent: #B5792A;
+    --accent: #FFFFFF;
     --accent-soft: #F3E6D2;
     --line: #E4DFD3;
     --serif: Georgia, 'Times New Roman', serif;
@@ -40,10 +40,10 @@ body {
 
 #cover .eyebrow {
     font-size: 12px;
-    text-transform: uppercase;
     letter-spacing: .14em;
     opacity: .65;
     outline: none;
+    margin-bottom: 6px;
 }
 
 #cover h1 {

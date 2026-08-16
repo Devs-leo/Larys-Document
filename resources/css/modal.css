@@ -242,3 +242,44 @@
     border: none;
     color: #fff;
 }
+
+/* ---------- Tutorial modal ---------- */
+.tutorial-modal {
+    max-width: 560px;
+    text-align: left;
+}
+
+.tutorial-modal-body {
+    max-height: 62vh;
+    overflow-y: auto;
+    padding-right: 8px;
+    margin-bottom: 16px;
+}
+
+.tutorial-modal-body section + section {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+}
+
+.tutorial-modal-body h4 {
+    margin: 0 0 8px;
+    font-family: var(--serif);
+    font-size: 15px;
+}
+
+.tutorial-modal-body p,
+.tutorial-modal-body li {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink);
+}
+
+.tutorial-modal-body p + p {
+    margin-top: 8px;
+}
+
+.tutorial-modal-body ul {
+    margin: 8px 0;
+    padding-left: 20px;
+}
