@@ -141,15 +141,6 @@ export function removeContentItem(blockId, itemId) {
     });
 }
 
-/**
- * Patches a content item's data. Use for change NOT already reflected in the DOM.
- * @param {string} blockId
- * @param {string} itemId
- * @param {Object} patch
- */
-export function setContentItemData(blockId, itemId, patch) {
-    updateContentItemWith(blockId, itemId, data => Object.assign(data, patch));
-}
 
 /**
  * Patches a content item's data silently.
@@ -159,26 +150,6 @@ export function setContentItemData(blockId, itemId, patch) {
  */
 export function mutateContentItemData(blockId, itemId, patch) {
     mutateContentItemWith(blockId, itemId, data => Object.assign(data, patch));
-}
-
-/**
- * Swap a content item with its previus/next sibling within its own container.
- * @param {string} blockId
- * @param {string} containerId
- * @param {string} itemId
- * @param {'up'|'down'} direction
- */
-export function moveContentItem(blockId, containerId, itemId, direction) {
-    updateBlockData(blockId, data => {
-        const container = findContainer(data, containerId, blockId);
-        if (!container) throw new Error(`Container not found: ${containerId}`);
-        const arr = container.content;
-        const i = arr.findIndex(it => it.id === itemId);
-        if (i === -1) return;
-        const j = direction === 'up' ? i - 1 : i + 1;
-        if (j < 0 || j >= arr.length) return;
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    });
 }
 
 /**

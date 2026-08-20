@@ -70,7 +70,7 @@ async function onImageClick(e) {
     const positionBtn = e.target.closest('[data-action="set-image-position"]');
     if (positionBtn) {
         setImagePosition(itemBlockId(positionBtn), itemId(positionBtn), positionBtn.dataset.align);
-        return;
+        //return;
     }
 }
 

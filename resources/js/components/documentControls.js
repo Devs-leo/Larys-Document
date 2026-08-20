@@ -1,6 +1,6 @@
 import {addBlock} from "../state.js";
 import {openReorderModal} from "./reorderModal.js";
-import {showTocSettingsModal} from "./tocSettigsModal.js";
+import {showTocSettingsModal} from "./tocSettingsModal.js";
 
 const el = {
     addSectionBtn: document.getElementById('add-section-btn'),

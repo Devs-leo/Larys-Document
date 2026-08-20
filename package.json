@@ -1,14 +1,18 @@
 {
-  "name": "Larys-Document",
+  "name": "larys-document",
   "version": "1.0.0",
-  "description": "",
+  "description": "Editor documenti Larys Consulting",
   "main": "index.html",
   "scripts": {
     "start": "neu run",
     "build": "neu build"
   },
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "jszip": "^3.10.1"
+  },
+  "devDependencies": {
+    "@neutralinojs/neu": "^11.7.2"
   }
 }

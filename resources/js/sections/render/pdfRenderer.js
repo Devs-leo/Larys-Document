@@ -18,7 +18,7 @@ function renderRichHtml(html = '') {
 }
 
 function renderCover(state) {
-    const logo = document.querySelector('#logo-slot')?.innerHTML?.trim() || '<img src="../assets/logo.png" alt="Logo">';
+    const logo = document.querySelector('#logo-slot')?.innerHTML?.trim() || '<img src="/resources/assets/logo.png" alt="Logo">';
 
     return `
         <section class="pdf-cover">

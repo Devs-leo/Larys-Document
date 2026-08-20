@@ -116,29 +116,6 @@ export function setListItems(blockId, listItemId, parentItemId, newItems) {
     });
 }
 
-/**
- * Swaps a list item with its previous/next sibling within its own
- * container (top level if parentItemId is null, nested otherwise).
- * @param {string} blockId
- * @param {string} listItemId
- * @param {string|null} parentItemId
- * @param {string} itemId
- * @param {'up'|'down'} direction
- */
-export function moveListItem(blockId, listItemId, parentItemId, itemId, direction) {
-    updateContentItemWith(blockId, listItemId, data => {
-        const arr = parentItemId === null
-            ? data.items
-            : findListItem(data.items, parentItemId)?.item.children;
-        if (!arr) throw new Error(`No list item with id: ${parentItemId}`);
-        const i = arr.findIndex(it => it.id === itemId);
-        if (i === -1) return;
-        const j = direction === 'up' ? i - 1 : i + 1;
-        if (j < 0 || j >= arr.length) return;
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    });
-}
-
 
 /**
  * Reads a single level's style + items.

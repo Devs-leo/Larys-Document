@@ -84,7 +84,7 @@ async function onContentClick(e) {
             listItemId: itemId(listReorderBtn),
             parentItemId,
         });
-        return;
+        //return;
     }
 }
 

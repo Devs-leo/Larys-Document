@@ -1,6 +1,6 @@
 import {updateTheme, resetState} from "../state.js";
 import {showConfirmModal} from "./confirmModal.js";
-import {loadDraft, saveDraft} from "../services/storage.js";
+import {loadDraft, saveDraft, clearActiveDraftPath} from "../services/storage.js";
 import {showTutorialModal} from "./tutorialModal.js"
 
 const el = {
@@ -13,7 +13,7 @@ const el = {
     newDocBtn: document.getElementById('new-doc-btn'),
     tutorialBtn: document.getElementById('tutorial-btn'),
     saveDocBtn: document.getElementById('save-doc-btn'),
-    loadDraftInput: document.getElementById('load-draft-input'),
+    loadDraftBtn: document.getElementById('load-draft-btn'),
 }
 
 /**
@@ -56,6 +56,7 @@ export function bindToolbarEvents() {
     el.newDocBtn.addEventListener('click', async () => {
         if (await showConfirmModal('Creare un nuovo documento? Le modifiche non salvate andranno perse.')) {
             resetState();
+            clearActiveDraftPath();
         }
     });
 
@@ -70,12 +71,9 @@ export function bindToolbarEvents() {
         }
     });
 
-    el.loadDraftInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        e.target.value = ''; // permette di riselezionare lo stesso file e ritriggerare 'change'
-        if (!file) return;
+    el.loadDraftBtn.addEventListener('click', async () => {
         try {
-            await loadDraft(file);
+            await loadDraft();
         } catch (err) {
             console.error('Errore caricamento bozza:', err);
             await showConfirmModal('Caricamento non riuscito. Controlla la console per i dettagli.');
@@ -100,7 +98,7 @@ export function renderToolbar(state) {
     el.secondaryInput.value = state.theme.secondary;
 
     const matched = Object.entries(PRESETS).find(
-        ([key, val]) => val && val.primary === state.theme.primary && val.secondary === state.theme.secondary
+        ([val]) => val && val.primary === state.theme.primary && val.secondary === state.theme.secondary
     );
     setActivePreset(matched ? matched[0] : 'custom');
 }

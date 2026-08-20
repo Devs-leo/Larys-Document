@@ -1,4 +1,3 @@
-// components/tocSettingsModal.js — nuovo file, stesso schema di listSettingsModal.js
 import {getState, setTocPosition} from '../state.js';
 
 const overlay = document.createElement('div');

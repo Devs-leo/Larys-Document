@@ -27,7 +27,16 @@ function waitForNextFrame() {
     return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 }
 
+function destroyPagedPages() {
+    try {
+        window.PagedPolyfill?.chunker?.removePages();
+    } catch (error) {
+        console.warn('Impossibile ripulire le pagine di Paged.js prima del reset:', error);
+    }
+}
+
 function cleanup(preview) {
+    destroyPagedPages();
     preview.innerHTML = '';
     preview.classList.remove('is-exporting');
     document.body.classList.remove('pdf-exporting');
@@ -76,7 +85,6 @@ export async function exportPdf() {
             window.addEventListener('afterprint', finish, {once: true});
             window.print();
 
-            // Some embedded WebViews do not emit afterprint when the print command is cancelled.
             setTimeout(() => {
                 if (document.body.classList.contains('pdf-exporting')) {
                     window.removeEventListener('afterprint', finish);

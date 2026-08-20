@@ -5,6 +5,10 @@ import {bindToolbarEvents} from "./components/toolbar.js";
 import {bindDocumentControls} from "./components/documentControls.js";
 import {bindSectionEvents} from "./sections/sectionEvents.js";
 import {bindPdfExport} from "./services/pdfExport.js"
+import {startAutosave} from "./services/storage.js";
+
+/** Autosave interval, in ms. Adjust to taste. */
+const AUTOSAVE_INTERVAL_MS = 60_000;
 
 /**
  * Function to handle the window close event by gracefully exiting the Neutralino application.
@@ -24,6 +28,8 @@ bindToolbarEvents();
 bindDocumentControls();
 bindSectionEvents();
 bindPdfExport();
+
+startAutosave(AUTOSAVE_INTERVAL_MS);
 
 onChange(render);
 render();

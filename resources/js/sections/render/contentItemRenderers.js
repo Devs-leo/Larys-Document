@@ -5,7 +5,7 @@ import {renderContentItem} from "./sectionRenderer.js";
 
 /**
  * Registry of render functions per content-item type, consumed by
- * sectionRenderer.js's dispatcher (renderContentItem).
+ * sectionRenderer.js dispatcher (renderContentItem).
  * @type {Object.<string, (item: ContentItem, ctx: RenderCtx) => HTMLElement>}
  */
 export const contentItemRenderers = {

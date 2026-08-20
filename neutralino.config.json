@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/neutralinojs/neutralinojs/main/schemas/neutralino.config.schema.json",
-  "applicationId": "js.neutralino.sample",
+  "applicationId": "com.larys.document",
   "version": "1.0.0",
   "defaultMode": "window",
   "port": 0,
@@ -17,20 +17,9 @@
     "app.*",
     "os.*",
     "filesystem.*",
+    "events.*",
     "debug.log"
   ],
-  "globalVariables": {
-    "TEST1": "Hello",
-    "TEST2": [
-      2,
-      4,
-      5
-    ],
-    "TEST3": {
-      "value1": 10,
-      "value2": {}
-    }
-  },
   "modes": {
     "window": {
       "title": "Larys-Document",
@@ -41,8 +30,8 @@
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/resources/icons/appIcon.png",
-      "enableInspector": true,
+      "icon": "/resources/assets/logo.png",
+      "enableInspector": false,
       "borderless": false,
       "maximize": false,
       "hidden": false,
@@ -50,9 +39,6 @@
       "exitProcessOnClose": false
     },
     "browser": {
-      "globalVariables": {
-        "TEST": "Test value browser"
-      },
       "nativeBlockList": [
         "filesystem.*"
       ]
