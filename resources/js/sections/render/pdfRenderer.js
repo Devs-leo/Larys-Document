@@ -18,7 +18,7 @@ function renderRichHtml(html = '') {
 }
 
 function renderCover(state) {
-    const logo = document.querySelector('#logo-slot')?.innerHTML?.trim() || '<img src="/resources/assets/logo.png" alt="Logo">';
+    const logo = document.querySelector('#logo-slot')?.innerHTML?.trim() || '<img src="../assets/logo.png" alt="Logo">';
 
     return `
         <section class="pdf-cover">
@@ -233,7 +233,7 @@ export function renderPdfDocument(state = getState()) {
     const topToc = state.tocPosition !== 'bottom';
 
     return `
-        <div class="pdf-document" style="--pdf-primary:${escapeHtml(state.theme?.primary || '#050a37')};--pdf-secondary:${escapeHtml(state.theme?.secondary || '#FFFFFF')}">
+        <div class="pdf-document" style="--pdf-primary:${escapeHtml(state.theme?.primary || '#050a37')};--pdf-secondary:${escapeHtml(state.theme?.secondary || '#B5792A')}">
             ${renderHeaderFooter(state)}
             ${renderCover(state)}
             ${topToc ? toc : ''}
