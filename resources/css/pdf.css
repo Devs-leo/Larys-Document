@@ -159,7 +159,7 @@ body.pdf-exporting > #pdf-preview { display: block; background: #fff; min-height
     text-align: center;
 }
 .pdf-cover-main { max-width: 150mm; }
-.pdf-eyebrow { color: var(--pdf-secondary); text-transform: uppercase; letter-spacing: 0.15em; font-size: 9pt; font-weight: 700; margin-bottom: 6mm; }
+.pdf-eyebrow { color: #ffffff; letter-spacing: 0.15em; font-size: 9pt; font-weight: 700; margin-bottom: 6mm; }
 .pdf-cover h1 { margin: 0; color: #fff; font-size: 26pt; line-height: 1.15; font-weight: 700; }
 .pdf-cover-meta { margin-top: 6mm; color: rgba(255, 255, 255, 0.75); font-size: 10pt; line-height: 1.5; }
 .pdf-cover-logo { position: absolute; top: 75%; left: 50%; transform: translate(-50%, -50%); width: 70mm; }
